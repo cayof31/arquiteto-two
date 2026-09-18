@@ -1,0 +1,12 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "studio-suzana-loroff-midia",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-18",
+  "observability": { "enabled": true },
+  "cache": { "enabled": true },
+  "images": { "binding": "IMAGES" },
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "studio-suzana-loroff" }
+  ]
+}

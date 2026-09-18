@@ -2,7 +2,6 @@
 import { site, mensagemWhatsapp } from '../../config/site';
 import { linkWhatsapp } from '../../lib/whatsapp';
 import Foto from '../midia/Foto.astro';
-import retrato from '../../assets/suzana/retrato.jpg';
 
 const whatsapp = linkWhatsapp(mensagemWhatsapp);
 ---
@@ -34,7 +33,7 @@ const whatsapp = linkWhatsapp(mensagemWhatsapp);
 
   <div class="relative aspect-[3/4] w-full overflow-hidden md:aspect-[4/5]">
     <Foto
-      src={retrato}
+      src="suzana/retrato.jpg"
       alt={`${site.arquiteta}, arquiteta do ${site.nome}`}
       sizes="(min-width: 768px) 45vw, 100vw"
       prioridade

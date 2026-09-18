@@ -1,7 +1,6 @@
 ---
 import { site } from '../../config/site';
 import Foto from '../midia/Foto.astro';
-import atelier from '../../assets/suzana/atelier.jpg';
 
 const numeros = [
   { valor: `${site.anosAtuacao}+`, rotulo: 'Anos de atuação' },
@@ -28,7 +27,7 @@ const numeros = [
       </dl>
     </div>
     <div class="aspect-[4/3] overflow-hidden">
-      <Foto src={atelier} alt={`Sala do ${site.nome}, sem pessoas`} sizes="(min-width: 768px) 45vw, 100vw" />
+      <Foto src="suzana/atelier.jpg" alt={`Sala do ${site.nome}, sem pessoas`} sizes="(min-width: 768px) 45vw, 100vw" />
     </div>
   </div>
 </section>

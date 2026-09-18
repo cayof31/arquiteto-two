@@ -14,17 +14,17 @@ materiais:
   - Azulejos
 destaque: false
 ordem: 4
-capa: ../../assets/projetos/dr-house/capa.jpg
+capa: projetos/dr-house/capa.jpg
 altCapa: Pátio ajardinado da DR House com estúdio de pé-direito duplo
 galeria:
-  - ../../assets/projetos/dr-house/1.jpg
-  - ../../assets/projetos/dr-house/2.jpg
-  - ../../assets/projetos/dr-house/3.jpg
-  - ../../assets/projetos/dr-house/4.jpg
-  - ../../assets/projetos/dr-house/5.jpg
+  - projetos/dr-house/1.jpg
+  - projetos/dr-house/2.jpg
+  - projetos/dr-house/3.jpg
+  - projetos/dr-house/4.jpg
+  - projetos/dr-house/5.jpg
 plantas:
-  - ../../assets/projetos/dr-house/planta-1.jpg
-  - ../../assets/projetos/dr-house/planta-2.jpg
+  - projetos/dr-house/planta-1.jpg
+  - projetos/dr-house/planta-2.jpg
 fonte:
   nome: ArchDaily
   url: https://www.archdaily.com/1183689/dr-house-arc-architects

@@ -12,17 +12,17 @@ materiais:
   - Vidro
 destaque: true
 ordem: 2
-capa: ../../assets/projetos/residencia-caraca/capa.jpg
+capa: projetos/residencia-caraca/capa.jpg
 altCapa: Pátio central da Residência Caraçá com tesouras de madeira
 galeria:
-  - ../../assets/projetos/residencia-caraca/1.jpg
-  - ../../assets/projetos/residencia-caraca/2.jpg
-  - ../../assets/projetos/residencia-caraca/3.jpg
-  - ../../assets/projetos/residencia-caraca/4.jpg
-  - ../../assets/projetos/residencia-caraca/5.jpg
+  - projetos/residencia-caraca/1.jpg
+  - projetos/residencia-caraca/2.jpg
+  - projetos/residencia-caraca/3.jpg
+  - projetos/residencia-caraca/4.jpg
+  - projetos/residencia-caraca/5.jpg
 plantas:
-  - ../../assets/projetos/residencia-caraca/planta-1.jpg
-  - ../../assets/projetos/residencia-caraca/planta-2.jpg
+  - projetos/residencia-caraca/planta-1.jpg
+  - projetos/residencia-caraca/planta-2.jpg
 fonte:
   nome: ArchDaily
   url: https://www.archdaily.com.br/pt/1183471/residencia-caraca-23-sul

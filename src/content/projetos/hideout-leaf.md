@@ -14,17 +14,17 @@ materiais:
   - Palha Tradicional
 destaque: true
 ordem: 3
-capa: ../../assets/projetos/hideout-leaf/capa.jpg
+capa: projetos/hideout-leaf/capa.jpg
 altCapa: Cobertura em bambu da Hideout Leaf Villa na selva de Bali
 galeria:
-  - ../../assets/projetos/hideout-leaf/1.jpg
-  - ../../assets/projetos/hideout-leaf/2.jpg
-  - ../../assets/projetos/hideout-leaf/3.jpg
-  - ../../assets/projetos/hideout-leaf/4.jpg
-  - ../../assets/projetos/hideout-leaf/5.jpg
+  - projetos/hideout-leaf/1.jpg
+  - projetos/hideout-leaf/2.jpg
+  - projetos/hideout-leaf/3.jpg
+  - projetos/hideout-leaf/4.jpg
+  - projetos/hideout-leaf/5.jpg
 plantas:
-  - ../../assets/projetos/hideout-leaf/planta-1.jpg
-  - ../../assets/projetos/hideout-leaf/planta-2.jpg
+  - projetos/hideout-leaf/planta-1.jpg
+  - projetos/hideout-leaf/planta-2.jpg
 fonte:
   nome: ArchDaily
   url: https://www.archdaily.com/1183102/hideout-leaf-villa-pablo-luna-studio

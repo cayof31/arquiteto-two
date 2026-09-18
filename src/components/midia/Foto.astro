@@ -1,8 +1,9 @@
 ---
 import { Picture } from 'astro:assets';
+import { srcsetMidia, urlMidia } from '../../lib/midia';
 
 interface Props {
-  src: ImageMetadata;
+  src: string;
   alt: string;
   sizes: string;
   prioridade?: boolean;
@@ -10,18 +11,45 @@ interface Props {
   classe?: string;
 }
 
+const locais = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/**/*.{jpg,jpeg,png,webp}',
+  { eager: true },
+);
+
 const { src, alt, sizes, prioridade = false, eager = false, classe = '' } = Astro.props;
+const base = import.meta.env.PUBLIC_IMAGE_BASE as string | undefined;
+const local = Object.entries(locais).find(([caminho]) =>
+  caminho.endsWith(`/assets/${src}`) || caminho.endsWith(`/${src}`),
+)?.[1]?.default;
+const classeImg = `h-full w-full ${classe || 'object-cover'}`;
 ---
 
-<Picture
-  src={src}
-  alt={alt}
-  formats={['avif', 'webp']}
-  widths={[480, 960, 1440]}
-  quality={80}
-  sizes={sizes}
-  loading={prioridade || eager ? 'eager' : 'lazy'}
-  fetchpriority={prioridade ? 'high' : 'auto'}
-  decoding={prioridade ? 'sync' : 'async'}
-  class={`h-full w-full ${classe || 'object-cover'}`}
-/>
+{
+  base ? (
+    <img
+      src={urlMidia(base, src, 960)}
+      srcset={srcsetMidia(base, src)}
+      sizes={sizes}
+      alt={alt}
+      class={classeImg}
+      loading={prioridade || eager ? 'eager' : 'lazy'}
+      fetchpriority={prioridade ? 'high' : 'auto'}
+      decoding={prioridade ? 'sync' : 'async'}
+    />
+  ) : local ? (
+    <Picture
+      src={local}
+      alt={alt}
+      formats={['avif', 'webp']}
+      widths={[480, 960, 1440]}
+      quality={80}
+      sizes={sizes}
+      loading={prioridade || eager ? 'eager' : 'lazy'}
+      fetchpriority={prioridade ? 'high' : 'auto'}
+      decoding={prioridade ? 'sync' : 'async'}
+      class={classeImg}
+    />
+  ) : (
+    <p class="text-sm text-cinza">Imagem ausente: {src}</p>
+  )
+}

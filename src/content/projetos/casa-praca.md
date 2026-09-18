@@ -14,17 +14,17 @@ materiais:
   - Muros de Pedra
 destaque: true
 ordem: 1
-capa: ../../assets/projetos/casa-praca/capa.jpg
+capa: projetos/casa-praca/capa.jpg
 altCapa: Vista da Casa Praça com blocos intercalados por pátios
 galeria:
-  - ../../assets/projetos/casa-praca/1.jpg
-  - ../../assets/projetos/casa-praca/2.jpg
-  - ../../assets/projetos/casa-praca/3.jpg
-  - ../../assets/projetos/casa-praca/4.jpg
-  - ../../assets/projetos/casa-praca/5.jpg
+  - projetos/casa-praca/1.jpg
+  - projetos/casa-praca/2.jpg
+  - projetos/casa-praca/3.jpg
+  - projetos/casa-praca/4.jpg
+  - projetos/casa-praca/5.jpg
 plantas:
-  - ../../assets/projetos/casa-praca/planta-1.jpg
-  - ../../assets/projetos/casa-praca/planta-2.jpg
+  - projetos/casa-praca/planta-1.jpg
+  - projetos/casa-praca/planta-2.jpg
 fonte:
   nome: ArchDaily
   url: https://www.archdaily.com.br/br/1032817/casa-praca-felipe-hess-arquitetos

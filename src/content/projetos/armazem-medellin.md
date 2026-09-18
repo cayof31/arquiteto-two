@@ -14,17 +14,17 @@ materiais:
   - Vegetação Tropical Interna
 destaque: false
 ordem: 5
-capa: ../../assets/projetos/armazem-medellin/capa.jpg
+capa: projetos/armazem-medellin/capa.jpg
 altCapa: Interior do Armazém Comunitário com tesouras de madeira e mezanino
 galeria:
-  - ../../assets/projetos/armazem-medellin/1.jpg
-  - ../../assets/projetos/armazem-medellin/2.jpg
-  - ../../assets/projetos/armazem-medellin/3.jpg
-  - ../../assets/projetos/armazem-medellin/4.jpg
-  - ../../assets/projetos/armazem-medellin/5.jpg
+  - projetos/armazem-medellin/1.jpg
+  - projetos/armazem-medellin/2.jpg
+  - projetos/armazem-medellin/3.jpg
+  - projetos/armazem-medellin/4.jpg
+  - projetos/armazem-medellin/5.jpg
 plantas:
-  - ../../assets/projetos/armazem-medellin/planta-1.jpg
-  - ../../assets/projetos/armazem-medellin/planta-2.jpg
+  - projetos/armazem-medellin/planta-1.jpg
+  - projetos/armazem-medellin/planta-2.jpg
 fonte:
   nome: ArchDaily
   url: https://www.archdaily.com/1088922/communal-warehouse-medellin-yemail-arquitectura
