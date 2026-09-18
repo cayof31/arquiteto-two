@@ -1,0 +1,27 @@
+---
+interface Props {
+  titulo: string;
+  descricao: string;
+  canonico?: string;
+  imagemOg?: string;
+}
+
+const { titulo, descricao, canonico, imagemOg } = Astro.props;
+const urlCanonica = new URL(canonico ?? Astro.url.pathname, Astro.site);
+const urlImagem = imagemOg ? new URL(imagemOg, Astro.site).href : undefined;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{titulo}</title>
+<meta name="description" content={descricao} />
+<link rel="canonical" href={urlCanonica.href} />
+<meta name="robots" content="index, follow" />
+
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="pt_BR" />
+<meta property="og:title" content={titulo} />
+<meta property="og:description" content={descricao} />
+<meta property="og:url" content={urlCanonica.href} />
+{urlImagem && <meta property="og:image" content={urlImagem} />}
+<meta name="twitter:card" content="summary_large_image" />

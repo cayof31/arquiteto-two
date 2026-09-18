@@ -1,0 +1,26 @@
+---
+import { site } from '../../config/site';
+import Foto from '../midia/Foto.astro';
+import sobre from '../../assets/suzana/sobre.jpg';
+---
+
+<section id="sobre" class="border-t border-linha">
+  <div class="mx-auto grid max-w-6xl items-center gap-12 px-5 py-20 md:grid-cols-2 md:py-28">
+    <div class="order-2 aspect-[3/4] overflow-hidden md:order-1 md:max-w-md">
+      <Foto
+        src={sobre}
+        alt={`${site.arquiteta} no ${site.nome}`}
+        sizes="(min-width: 768px) 40vw, 100vw"
+      />
+    </div>
+    <div class="order-1 md:order-2">
+      <p class="rotulo text-terracota">Sobre</p>
+      <h2 class="mt-3 font-titulo text-4xl leading-tight md:text-5xl">A pessoa atrás do studio</h2>
+      {
+        site.bio.map((paragrafo) => (
+          <p class="mt-6 max-w-prose leading-relaxed text-cinza">{paragrafo}</p>
+        ))
+      }
+    </div>
+  </div>
+</section>

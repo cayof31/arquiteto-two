@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ObraCard from '../../components/projetos/ObraCard.astro';
+import { site } from '../../config/site';
+import { fichaTrilha } from '../../lib/seo';
+
+const obras = (await getCollection('projetos')).sort((a, b) => a.data.ordem - b.data.ordem);
+const urlSite = Astro.site?.href.replace(/\/$/, '') ?? '';
+---
+
+<Base
+  titulo={`Projetos | ${site.nome}`}
+  descricao={`Portfólio de arquitetura do ${site.nome}: residências, hospitalidade e interiores.`}
+  estruturados={[
+    fichaTrilha([
+      { nome: 'Início', url: urlSite },
+      { nome: 'Projetos', url: `${urlSite}/projetos` },
+    ]),
+  ]}
+>
+  <section class="mx-auto max-w-6xl px-5 py-16 md:py-24">
+    <p class="rotulo text-terracota">Portfólio</p>
+    <h1 class="mt-3 font-titulo text-5xl md:text-6xl">Projetos</h1>
+    <p class="mt-5 max-w-prose text-cinza">
+      Uma seleção de obras que o ateliê usa como referência de materialidade, escala e convívio.
+    </p>
+    <ul class="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        obras.map((obra) => (
+          <li>
+            <ObraCard obra={obra} />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>

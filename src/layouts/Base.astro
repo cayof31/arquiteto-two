@@ -1,0 +1,39 @@
+---
+import '../styles/global.css';
+import Meta from '../components/seo/Meta.astro';
+import DadosEstruturados from '../components/seo/DadosEstruturados.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  canonico?: string;
+  imagemOg?: string;
+  estruturados?: object[];
+}
+
+const { titulo, descricao, canonico, imagemOg, estruturados = [] } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <Meta titulo={titulo} descricao={descricao} canonico={canonico} imagemOg={imagemOg} />
+    <DadosEstruturados fichas={estruturados} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a
+      href="#conteudo"
+      class="rotulo sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-tinta focus:px-4 focus:py-2 focus:text-papel"
+    >
+      Pular para o conteúdo
+    </a>
+    <Header />
+    <main id="conteudo">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,17 @@
+---
+interface Props {
+  fichas: object[];
+}
+
+const { fichas } = Astro.props;
+---
+
+{
+  fichas.map((ficha) => (
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(ficha).replace(/</g, '\\u003c')}
+    />
+  ))
+}

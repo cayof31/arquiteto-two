@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://studio-suzana-loroff.micro-sass.com/sitemap-index.xml

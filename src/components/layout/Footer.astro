@@ -1,0 +1,51 @@
+---
+import { site } from '../../config/site';
+
+const ano = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-linha">
+  <div class="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-3">
+    <div>
+      <p class="font-titulo text-2xl">{site.nome}</p>
+      <p class="mt-4 max-w-sm text-sm leading-relaxed text-cinza">
+        {site.descricaoCurta}
+      </p>
+    </div>
+
+    <nav aria-label="Páginas">
+      <p class="rotulo text-cinza">Navegar</p>
+      <ul class="mt-4 grid gap-2 text-sm">
+        <li><a class="hover:text-terracota" href="/">Início</a></li>
+        <li><a class="hover:text-terracota" href="/#sobre">Sobre</a></li>
+        <li><a class="hover:text-terracota" href="/projetos">Projetos</a></li>
+        <li><a class="hover:text-terracota" href="/#contato">Contato</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <p class="rotulo text-cinza">Studio</p>
+      <address class="mt-4 grid gap-1 text-sm not-italic leading-relaxed text-cinza">
+        <span>{site.arquiteta}</span>
+        <span>{site.endereco}</span>
+        <a class="hover:text-terracota" href={`mailto:${site.email}`}>{site.email}</a>
+      </address>
+      <p class="mt-5 text-xs leading-relaxed text-cinza">
+        Retratos no
+        <a class="underline-offset-2 hover:underline" href={site.fotos.retrato.url} target="_blank" rel="noopener">Unsplash</a>
+        e
+        <a class="underline-offset-2 hover:underline" href={site.fotos.sobre.url} target="_blank" rel="noopener">Unsplash</a>.
+        Escritório de {site.fotos.atelier.credito}.
+      </p>
+    </div>
+  </div>
+
+  <div class="border-t border-linha px-5 py-6 text-xs text-cinza">
+    <p class="mx-auto max-w-6xl">
+      © {ano} {site.nome} — produzido por
+      <a class="text-tinta underline-offset-2 hover:underline" href={site.microSassUrl} target="_blank" rel="noopener">
+        {site.autorSite}
+      </a>
+    </p>
+  </div>
+</footer>

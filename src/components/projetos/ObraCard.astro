@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Foto from '../midia/Foto.astro';
+
+interface Props {
+  obra: CollectionEntry<'projetos'>;
+}
+
+const { obra } = Astro.props;
+const { titulo, local, ano, capa, altCapa } = obra.data;
+---
+
+<a href={`/projetos/${obra.id}`} class="group block">
+  <div class="aspect-[4/3] overflow-hidden">
+    <Foto
+      src={capa}
+      alt={altCapa}
+      sizes="(min-width: 768px) 30vw, 100vw"
+      classe="transition duration-500 group-hover:scale-[1.03]"
+    />
+  </div>
+  <h3 class="mt-4 font-titulo text-2xl group-hover:text-terracota">{titulo}</h3>
+  <p class="mt-1 text-sm text-cinza">{local} · {ano}</p>
+</a>

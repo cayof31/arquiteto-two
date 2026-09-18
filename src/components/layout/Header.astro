@@ -1,0 +1,107 @@
+---
+import { site, mensagemWhatsapp } from '../../config/site';
+import { linkWhatsapp } from '../../lib/whatsapp';
+
+const links = [
+  { href: '/#sobre', rotulo: 'Sobre' },
+  { href: '/#escritorio', rotulo: 'Escritório' },
+  { href: '/projetos', rotulo: 'Projetos' },
+  { href: '/#contato', rotulo: 'Contato' },
+];
+
+const whatsapp = linkWhatsapp(mensagemWhatsapp);
+---
+
+<header class="sticky top-0 z-40 border-b border-linha bg-papel/95 backdrop-blur">
+  <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4" aria-label="Navegação principal">
+    <a href="/" class="font-titulo text-xl tracking-wide">
+      {site.nome}
+    </a>
+
+    <ul class="hidden items-center gap-8 md:flex">
+      {
+        links.map((link) => (
+          <li>
+            <a class="rotulo text-cinza transition hover:text-tinta" href={link.href}>
+              {link.rotulo}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a
+      href={whatsapp}
+      target="_blank"
+      rel="noopener"
+      class="rotulo hidden border border-terracota px-4 py-2 text-terracota transition hover:bg-terracota hover:text-papel md:inline-block"
+    >
+      WhatsApp
+    </a>
+
+    <button
+      type="button"
+      class="relative flex h-11 w-11 items-center justify-center md:hidden"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+      aria-label="Abrir o menu"
+      data-menu-abrir
+    >
+      <span class="sr-only">Menu</span>
+      <span class="flex h-3.5 w-[18px] flex-col justify-between" aria-hidden="true">
+        <span data-menu-traco class="block h-px w-full origin-center bg-tinta transition duration-300"></span>
+        <span data-menu-traco class="block h-px w-full origin-center bg-tinta transition duration-300"></span>
+        <span data-menu-traco class="block h-px w-full origin-center bg-tinta transition duration-300"></span>
+      </span>
+    </button>
+  </nav>
+
+  <div id="menu-mobile" hidden class="border-t border-linha bg-papel px-5 pb-6 pt-2 md:hidden">
+    <ul class="grid gap-1">
+      {
+        links.map((link) => (
+          <li>
+            <a class="block border-b border-linha py-3 font-titulo text-xl" href={link.href}>
+              {link.rotulo}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a
+      href={whatsapp}
+      target="_blank"
+      rel="noopener"
+      class="rotulo mt-5 block bg-terracota px-4 py-3 text-center text-papel"
+    >
+      Falar no WhatsApp
+    </a>
+  </div>
+</header>
+
+<style>
+  [data-menu-abrir][aria-expanded='true'] [data-menu-traco]:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+
+  [data-menu-abrir][aria-expanded='true'] [data-menu-traco]:nth-child(2) {
+    opacity: 0;
+  }
+
+  [data-menu-abrir][aria-expanded='true'] [data-menu-traco]:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+</style>
+
+<script>
+  const botao = document.querySelector<HTMLButtonElement>('[data-menu-abrir]');
+  const menu = document.getElementById('menu-mobile');
+
+  botao?.addEventListener('click', () => {
+    if (!menu) return;
+    const aberto = !menu.hidden;
+    menu.hidden = aberto;
+    botao.setAttribute('aria-expanded', String(!aberto));
+    botao.setAttribute('aria-label', aberto ? 'Abrir o menu' : 'Fechar o menu');
+  });
+</script>

@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import Sobre from '../components/home/Sobre.astro';
+import Escritorio from '../components/home/Escritorio.astro';
+import ObrasDestaque from '../components/home/ObrasDestaque.astro';
+import Contato from '../components/home/Contato.astro';
+import { site } from '../config/site';
+import { fichaEscritorio, fichaPessoa } from '../lib/seo';
+import { obrasDestaque } from '../lib/projetos';
+
+const todas = (await getCollection('projetos')).sort((a, b) => a.data.ordem - b.data.ordem);
+const destaques = obrasDestaque(todas).sort((a, b) => a.data.ordem - b.data.ordem);
+const urlSite = Astro.site?.href.replace(/\/$/, '') ?? '';
+---
+
+<Base
+  titulo={`${site.arquiteta} — ${site.nome} | Site para arquiteto`}
+  descricao={site.descricaoCurta}
+  estruturados={[fichaPessoa(urlSite), fichaEscritorio(urlSite)]}
+>
+  <Hero />
+  <Sobre />
+  <Escritorio />
+  <ObrasDestaque obras={destaques} />
+  <Contato />
+</Base>
