@@ -11,9 +11,11 @@ interface Props {
   canonico?: string;
   imagemOg?: string;
   estruturados?: object[];
+  /** A home horizontal tem o contato como último painel: oculta o rodapé. */
+  rodape?: boolean;
 }
 
-const { titulo, descricao, canonico, imagemOg, estruturados = [] } = Astro.props;
+const { titulo, descricao, canonico, imagemOg, estruturados = [], rodape = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -34,6 +36,6 @@ const { titulo, descricao, canonico, imagemOg, estruturados = [] } = Astro.props
     <main id="conteudo">
       <slot />
     </main>
-    <Footer />
+    {rodape && <Footer />}
   </body>
 </html>

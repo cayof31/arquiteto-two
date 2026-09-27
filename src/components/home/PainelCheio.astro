@@ -1,0 +1,73 @@
+---
+import Foto from '../midia/Foto.astro';
+
+interface Props {
+  src: string;
+  alt: string;
+  legenda: string;
+  detalhe?: string;
+  prioridade?: boolean;
+}
+
+const { src, alt, legenda, detalhe, prioridade = false } = Astro.props;
+---
+
+<section data-painel data-cheio class="painel painel-cheio">
+  <div class="foto" data-foto>
+    <Foto src={src} alt={alt} sizes="100vw" prioridade={prioridade} />
+  </div>
+
+  <div class="veu" aria-hidden="true"></div>
+
+  <div class="legenda">
+    <p class="rotulo text-papel" data-revelar>{legenda}</p>
+    {
+      detalhe && (
+        <p class="frase" data-revelar style="--atraso:140ms">
+          {detalhe}
+        </p>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .foto {
+    width: 100%;
+    height: 100%;
+    transform: scale(1.12);
+    will-change: transform;
+  }
+
+  .veu {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 45%;
+    background: linear-gradient(to top, rgb(44 36 22 / 0.75), transparent);
+    pointer-events: none;
+  }
+
+  .legenda {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    max-width: 44rem;
+    padding: clamp(1.25rem, 4vw, 3rem);
+    padding-bottom: clamp(2rem, 6vh, 3.5rem);
+  }
+
+  .frase {
+    margin-top: 0.75rem;
+    font-family: var(--font-titulo);
+    font-size: clamp(1.125rem, 3vh, 1.75rem);
+    line-height: 1.25;
+    color: var(--color-papel);
+  }
+
+  @media (max-width: 767px) {
+    .legenda {
+      max-width: 100%;
+      padding: 1.5rem 1.25rem;
+    }
+  }
+</style>

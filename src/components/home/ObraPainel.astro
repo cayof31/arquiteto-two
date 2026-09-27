@@ -1,0 +1,66 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Foto from '../midia/Foto.astro';
+
+interface Props {
+  obra: CollectionEntry<'projetos'>;
+  indice: number;
+}
+
+const { obra, indice } = Astro.props;
+const { titulo, categoria, local, ano, area, descricao, materiais, galeria } = Astro.props.obra.data;
+const [fotoA, fotoB] = galeria;
+const areaFormatada = new Intl.NumberFormat('pt-BR').format(area);
+const rotuloIndice = String(indice).padStart(2, '0');
+---
+
+<section data-painel class="painel painel-texto md:w-[min(94vw,1320px)]">
+  <div class="grid w-full items-center gap-9 md:grid-cols-[0.92fr_1.08fr] md:gap-14">
+    <div>
+      <p class="rotulo text-terracota" data-revelar>{rotuloIndice} · {categoria}</p>
+      <h2 class="mt-3 text-[clamp(2rem,5.6vh,3.4rem)] leading-[1.03]" data-revelar style="--atraso:80ms">
+        {titulo}
+      </h2>
+      <p class="rotulo mt-3 text-cinza" data-revelar style="--atraso:140ms">
+        {local} · {ano} · {areaFormatada} m²
+      </p>
+      <p
+        class="mt-5 max-w-prose text-[clamp(0.95rem,2vh,1.0625rem)] leading-relaxed text-cinza"
+        data-revelar
+        style="--atraso:200ms"
+      >
+        {descricao}
+      </p>
+      <ul class="mt-5 flex flex-wrap gap-2 text-[0.6875rem] text-cinza" data-revelar style="--atraso:260ms">
+        {
+          materiais.map((material) => (
+            <li class="border border-linha px-2.5 py-1.5">{material}</li>
+          ))
+        }
+      </ul>
+      <a
+        href={`/projetos/${obra.id}`}
+        class="rotulo mt-7 inline-block border border-tinta px-5 py-3 transition hover:bg-tinta hover:text-papel"
+        data-revelar
+        style="--atraso:320ms"
+      >
+        Ver projeto completo →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-2 items-start gap-4 md:gap-6">
+      <figure class="md:-mt-6" data-revelar="foto" style="--atraso:180ms">
+        <div class="aspect-[3/4] overflow-hidden">
+          <Foto src={fotoA} alt={`${titulo} — foto 1`} sizes="(min-width: 768px) 24vw, 45vw" />
+        </div>
+        <figcaption class="rotulo mt-2 text-cinza">{titulo} · vista 01</figcaption>
+      </figure>
+      <figure class="md:mt-10" data-revelar="foto" style="--atraso:340ms">
+        <div class="aspect-[4/5] overflow-hidden">
+          <Foto src={fotoB} alt={`${titulo} — foto 2`} sizes="(min-width: 768px) 24vw, 45vw" />
+        </div>
+        <figcaption class="rotulo mt-2 text-cinza">{titulo} · vista 02</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>

@@ -3,16 +3,29 @@ import { site, mensagemWhatsapp } from '../../config/site';
 import { linkWhatsapp } from '../../lib/whatsapp';
 
 const whatsapp = linkWhatsapp(mensagemWhatsapp);
+const ano = new Date().getFullYear();
 ---
 
-<section id="contato" class="border-t border-linha">
-  <div class="mx-auto max-w-3xl px-5 py-20 text-center md:py-28">
-    <p class="rotulo text-terracota">Contato</p>
-    <h2 class="mt-3 font-titulo text-4xl md:text-5xl">Vamos conversar sobre o seu projeto</h2>
-    <p class="mx-auto mt-6 max-w-prose leading-relaxed text-cinza">
-      O studio atende de {site.cidade}. Mande uma mensagem e contamos como trabalhamos, prazos e o primeiro encontro.
+<section id="contato" data-painel class="painel painel-texto md:w-[min(80vw,960px)]">
+  <div class="w-full text-center">
+    <p class="rotulo text-terracota" data-revelar>Contato</p>
+    <h2
+      class="mx-auto mt-3 max-w-3xl text-[clamp(2rem,6vh,3.5rem)] leading-[1.03]"
+      data-revelar
+      style="--atraso:80ms"
+    >
+      Vamos conversar sobre o seu projeto
+    </h2>
+    <p
+      class="mx-auto mt-5 max-w-prose text-[clamp(0.95rem,2vh,1.0625rem)] leading-relaxed text-cinza"
+      data-revelar
+      style="--atraso:160ms"
+    >
+      O studio atende de {site.cidade}. Mande uma mensagem e contamos como trabalhamos, prazos e o primeiro
+      encontro.
     </p>
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-3" data-revelar style="--atraso:240ms">
       <a
         href={whatsapp}
         target="_blank"
@@ -28,5 +41,30 @@ const whatsapp = linkWhatsapp(mensagemWhatsapp);
         {site.email}
       </a>
     </div>
+
+    <div
+      class="mx-auto mt-9 grid max-w-2xl gap-3 border-t border-linha pt-6 text-sm text-cinza sm:grid-cols-3"
+      data-revelar
+      style="--atraso:320ms"
+    >
+      <div class="text-center sm:text-left">
+        <p class="rotulo text-tinta">Endereço</p>
+        <p class="mt-1">{site.endereco}</p>
+      </div>
+      <div class="text-center">
+        <p class="rotulo text-tinta">Instagram</p>
+        <a href={site.instagramUrl} target="_blank" rel="noopener" class="mt-1 inline-block hover:text-terracota">
+          {site.instagram}
+        </a>
+      </div>
+      <div class="text-center sm:text-right">
+        <p class="rotulo text-tinta">E-mail</p>
+        <a href={`mailto:${site.email}`} class="mt-1 inline-block hover:text-terracota">{site.email}</a>
+      </div>
+    </div>
+
+    <p class="rotulo mt-8 text-cinza" data-revelar style="--atraso:400ms">
+      © {ano} {site.nome} · {site.autorSite}
+    </p>
   </div>
 </section>

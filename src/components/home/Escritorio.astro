@@ -9,25 +9,53 @@ const numeros = [
 ];
 ---
 
-<section id="escritorio" class="border-t border-linha">
-  <div class="mx-auto grid max-w-6xl gap-12 px-5 py-20 md:grid-cols-2 md:items-center md:py-28">
+<section id="escritorio" data-painel class="painel painel-texto md:w-[min(88vw,1140px)]">
+  <div class="grid w-full items-center gap-9 md:grid-cols-[1fr_0.8fr] md:gap-16">
     <div>
-      <p class="rotulo text-terracota">O escritório</p>
-      <h2 class="mt-3 font-titulo text-4xl leading-tight md:text-5xl">{site.nome}</h2>
-      <p class="mt-6 max-w-prose leading-relaxed text-cinza">{site.filosofia}</p>
-      <dl class="mt-10 grid grid-cols-3 gap-4">
+      <p class="rotulo text-terracota" data-revelar>O escritório</p>
+      <h2 class="mt-3 text-[clamp(2rem,5.4vh,3.25rem)] leading-[1.05]" data-revelar style="--atraso:80ms">
+        {site.nome}
+      </h2>
+      <p
+        class="mt-5 max-w-prose text-[clamp(0.95rem,2vh,1.0625rem)] leading-relaxed text-cinza"
+        data-revelar
+        style="--atraso:160ms"
+      >
+        {site.filosofia}
+      </p>
+
+      <dl class="mt-8 grid grid-cols-3 gap-4 border-t border-linha pt-6" data-revelar style="--atraso:240ms">
         {
           numeros.map((item) => (
             <div>
               <dt class="text-xs text-cinza">{item.rotulo}</dt>
-              <dd class="mt-1 font-titulo text-2xl md:text-3xl">{item.valor}</dd>
+              <dd class="mt-1 font-titulo text-[clamp(1.5rem,4vh,2.25rem)]">{item.valor}</dd>
             </div>
           ))
         }
       </dl>
+
+      <a
+        href="#projetos"
+        class="rotulo mt-8 inline-flex items-center gap-2 text-terracota underline-offset-4 hover:underline"
+        data-revelar
+        style="--atraso:320ms"
+      >
+        Ver as obras <span aria-hidden="true">→</span>
+      </a>
     </div>
-    <div class="aspect-[4/3] overflow-hidden">
-      <Foto src="suzana/atelier.jpg" alt={`Sala do ${site.nome}, sem pessoas`} sizes="(min-width: 768px) 45vw, 100vw" />
-    </div>
+
+    <figure class="mx-auto w-full max-w-[420px] md:mx-0">
+      <div class="aspect-[4/3] overflow-hidden" data-revelar="foto" style="--atraso:220ms">
+        <Foto
+          src="projetos/armazem-medellin/5.jpg"
+          alt="Interior com estrutura de madeira, painéis de vidro e vegetação"
+          sizes="(min-width: 768px) 28vw, 82vw"
+        />
+      </div>
+      <figcaption class="rotulo mt-3 text-cinza" data-revelar style="--atraso:340ms">
+        Armazém Comunitário Medellín · 2020
+      </figcaption>
+    </figure>
   </div>
 </section>
