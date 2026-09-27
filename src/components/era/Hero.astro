@@ -1,0 +1,41 @@
+---
+import Foto from '../midia/Foto.astro';
+import Dividido from './Dividido.astro';
+
+/* Abertura em tela cheia: foto de fundo, título gigante em duas linhas com o
+   acento manuscrito sobreposto e a faixa de três partes embaixo. */
+---
+
+<section id="inicio" class="e-secao e-hero" data-tema="claro">
+  <div class="e-fundo" aria-hidden="true">
+    <div class="e-paralelo" data-paralelo="70">
+      <Foto
+        src="projetos/dr-house/capa.jpg"
+        alt=""
+        sizes="100vw"
+        prioridade
+      />
+    </div>
+  </div>
+  <div class="e-veu" aria-hidden="true"></div>
+
+  <div class="e-hero-conteudo">
+    <h1 class="e-t-1 e-hero-titulo">
+      <span class="e-linha"><Dividido texto="Suzana" /></span>
+      <span class="e-linha"><Dividido texto="Loroff" atraso={160} /></span>
+      <span class="e-a1 e-hero-acento">
+        <span data-entrada style="--atraso:560ms">Studio</span>
+      </span>
+    </h1>
+
+    <div class="e-hero-linha" data-entrada style="--atraso:700ms">
+      <span class="e-t-5">Arquitetura</span>
+      <span class="e-l2">
+        <span>Residencial</span>
+        <i class="e-fio-h"></i>
+        <span>Hospitalidade</span>
+      </span>
+      <span class="e-t-5">São Paulo</span>
+    </div>
+  </div>
+</section>

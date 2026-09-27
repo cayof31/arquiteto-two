@@ -1,0 +1,31 @@
+---
+/* Roseta de oito pontas usada como ornamento (equivalente às flores da
+   referência: um desenho geométrico próprio, sem imagem de terceiros). */
+interface Props {
+  classe?: string;
+  largura?: string;
+}
+
+const { classe = '', largura } = Astro.props;
+const estilo = largura ? `width:${largura}` : undefined;
+---
+
+<svg
+  class:list={['e-orno', classe]}
+  style={estilo}
+  viewBox="0 0 48 48"
+  fill="none"
+  aria-hidden="true"
+>
+  <!-- Traço fino em qualquer escala (vector-effect precisa ficar no path):
+       as versões gigantes viram marca-d'água de fio, não desenho pesado. -->
+  <g stroke="currentColor" stroke-width="1.3" stroke-linejoin="round">
+    <path
+      d="M24 4c1.5 9 6 14.5 20 20-14 5.5-18.5 11-20 20-1.5-9-6-14.5-20-20 14-5.5 18.5-11 20-20Z"
+      vector-effect="non-scaling-stroke"></path>
+    <path
+      d="M24 4c1.5 9 6 14.5 20 20-14 5.5-18.5 11-20 20-1.5-9-6-14.5-20-20 14-5.5 18.5-11 20-20Z"
+      transform="rotate(45 24 24)"
+      vector-effect="non-scaling-stroke"></path>
+  </g>
+</svg>

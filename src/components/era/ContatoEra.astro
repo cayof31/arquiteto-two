@@ -1,0 +1,67 @@
+---
+import { site, mensagemWhatsapp } from '../../config/site';
+import { linkWhatsapp } from '../../lib/whatsapp';
+import Dividido from './Dividido.astro';
+
+/* Encerramento escuro: chamada em serifa display + contatos. */
+const whatsapp = linkWhatsapp(mensagemWhatsapp);
+
+const dados = [
+  { rotulo: 'Estúdio', valor: site.endereco },
+  { rotulo: 'E-mail', valor: site.email, href: `mailto:${site.email}` },
+  { rotulo: 'Instagram', valor: site.instagram, href: site.instagramUrl },
+];
+---
+
+<section id="contato" class="e-secao e-contato" data-tema="claro">
+  <p class="e-l1" data-entrada>Contato</p>
+
+  <div class="e-contato-titulo e-t-3">
+    <span class="e-linha"><Dividido texto="Vamos" /></span>
+    <span class="e-linha"><Dividido texto="conversar" atraso={160} /></span>
+  </div>
+
+  <p class="e-p1 e-contato-fala" data-entrada style="--atraso:420ms">
+    O studio atende de São Paulo. Mande uma mensagem e contamos como é o primeiro
+    encontro, prazos e o jeito que trabalhamos do desenho à obra.
+  </p>
+
+  <a
+    class="e-contato-principal"
+    href={whatsapp}
+    target="_blank"
+    rel="noopener"
+    data-entrada
+    style="--atraso:520ms"
+  >
+    Conversar no<br />WhatsApp
+  </a>
+
+  <div class="e-contato-links e-l1" data-entrada style="--atraso:640ms">
+    <a href={whatsapp} target="_blank" rel="noopener">Chamar no WhatsApp</a>
+    <a href={`tel:+${site.telefoneWhatsapp}`}>{site.telefoneExibicao}</a>
+  </div>
+
+  <dl class="e-contato-dados" data-entrada style="--atraso:760ms">
+    {
+      dados.map((item) => (
+        <div>
+          <dt class="e-l1">{item.rotulo}</dt>
+          <dd class="e-p1">
+            {item.href ? (
+              <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
+                {item.valor}
+              </a>
+            ) : (
+              item.valor
+            )}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <p class="e-l2" style="opacity:.55; margin-top: var(--u-32)">
+    © {new Date().getFullYear()} {site.nome} · {site.cidade}
+  </p>
+</section>

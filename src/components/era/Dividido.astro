@@ -1,0 +1,34 @@
+---
+/* Divide o texto em palavras e letras para a revelação letra a letra.
+   O elemento carrega aria-label com o texto original; as letras são ignoradas
+   por leitores de tela. */
+interface Props {
+  texto: string;
+  atraso?: number;
+  classe?: string;
+}
+
+const { texto, atraso = 0, classe = '' } = Astro.props;
+const palavras = texto.trim().split(/\s+/);
+let contador = 0;
+const estrutura = palavras.map((palavra) => ({
+  letras: [...palavra].map((letra) => ({ letra, i: contador++ })),
+}));
+---
+
+<span
+  class:list={['dividido', classe]}
+  data-texto
+  style={`--atraso:${atraso}ms`}
+  aria-label={texto}
+>
+  {
+    estrutura.map((palavra) => (
+      <span class="palavra" aria-hidden="true">
+        {palavra.letras.map((item) => (
+          <span class="letra" style={`--i:${item.i}`}>{item.letra}</span>
+        ))}
+      </span>
+    ))
+  }
+</span>

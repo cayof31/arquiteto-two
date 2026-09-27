@@ -1,26 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import FaixaHorizontal from '../components/home/FaixaHorizontal.astro';
-import Hero from '../components/home/Hero.astro';
-import PainelCheio from '../components/home/PainelCheio.astro';
-import Sobre from '../components/home/Sobre.astro';
-import Escritorio from '../components/home/Escritorio.astro';
-import ObrasDestaque from '../components/home/ObrasDestaque.astro';
-import ObraPainel from '../components/home/ObraPainel.astro';
-import Contato from '../components/home/Contato.astro';
+import '../styles/era.css';
+import Hero from '../components/era/Hero.astro';
+import Manifesto from '../components/era/Manifesto.astro';
+import SecaoHorizontal from '../components/era/SecaoHorizontal.astro';
+import ContatoEra from '../components/era/ContatoEra.astro';
+import Moldura from '../components/era/Moldura.astro';
+import Selo from '../components/era/Selo.astro';
+import Navegacao from '../components/era/Navegacao.astro';
+import Trilho from '../components/era/Trilho.astro';
+import Motor from '../components/era/Motor.astro';
 import { site } from '../config/site';
 import { fichaEscritorio, fichaPessoa } from '../lib/seo';
-import { obrasDestaque } from '../lib/projetos';
 
 const todas = (await getCollection('projetos')).sort((a, b) => a.data.ordem - b.data.ordem);
-const destaques = obrasDestaque(todas).sort((a, b) => a.data.ordem - b.data.ordem);
 const urlSite = Astro.site?.href.replace(/\/$/, '') ?? '';
-
-// Obras usadas como intervalos visuais entre os blocos de texto.
-const obraPorId = (id: string) => todas.find((obra) => obra.id === id);
-const armazem = obraPorId('armazem-medellin');
-const drHouse = obraPorId('dr-house');
 ---
 
 <Base
@@ -28,65 +23,35 @@ const drHouse = obraPorId('dr-house');
   descricao={site.descricaoCurta}
   estruturados={[fichaPessoa(urlSite), fichaEscritorio(urlSite)]}
   rodape={false}
+  cabecalho="mobile"
 >
-  <FaixaHorizontal>
+  <div class="pagina-era">
     <Hero />
+    <Manifesto />
 
-    <PainelCheio
-      src="suzana/atelier.jpg"
-      alt="Interior do ateliê do studio, com circulação longa e marcenaria escura"
-      legenda="O ateliê · Vila Madalena, São Paulo"
-      detalhe="Maquete, planta e conversa ocupam o mesmo lugar."
-      prioridade
+    <SecaoHorizontal
+      obras={todas}
+      intro={{
+        // Foto clara: o título gigante passa por cima do quadro e precisa de contraste.
+        src: 'projetos/casa-praca/capa.jpg',
+        alt: 'Casa com pátios e vegetação, vista da sala para o quintal',
+      }}
     />
 
-    <Sobre />
-    <Escritorio />
+    <ContatoEra />
 
-    {
-      armazem && (
-        <PainelCheio
-          src={armazem.data.capa}
-          alt={armazem.data.altCapa}
-          legenda="Obras além do residencial"
-          detalhe={`${armazem.data.titulo} · ${armazem.data.local}, ${armazem.data.ano}`}
-        />
-      )
-    }
+    <div class="e-chrome">
+      <Moldura />
+      <Selo />
+      <Navegacao />
+      <Trilho />
+    </div>
 
-    <ObrasDestaque obras={todas} />
-
-    {
-      destaques.map((obra, indice) => (
-        <Fragment>
-          <PainelCheio
-            src={obra.data.capa}
-            alt={obra.data.altCapa}
-            legenda={`${obra.data.categoria} · ${obra.data.local}, ${obra.data.ano}`}
-            detalhe={obra.data.titulo}
-          />
-          <ObraPainel obra={obra} indice={indice + 1} />
-        </Fragment>
-      ))
-    }
-
-    {
-      drHouse && (
-        <PainelCheio
-          src={drHouse.data.capa}
-          alt={drHouse.data.altCapa}
-          legenda={`${drHouse.data.categoria} · ${drHouse.data.local}, ${drHouse.data.ano}`}
-          detalhe={drHouse.data.titulo}
-        />
-      )
-    }
-
-    <Contato />
-  </FaixaHorizontal>
+    <Motor />
+  </div>
 </Base>
 
 <style is:global>
-  /* A home tem rolagem horizontal própria: a barra não aparece. */
   html {
     scrollbar-width: none;
   }

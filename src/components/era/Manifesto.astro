@@ -1,0 +1,34 @@
+---
+import { site } from '../../config/site';
+import Foto from '../midia/Foto.astro';
+import Dividido from './Dividido.astro';
+
+/* Declaração sobre foto em tela cheia — o "statement" vertical entre o hero e
+   a faixa horizontal. */
+---
+
+<section class="e-secao e-manifesto" data-tema="claro" id="manifesto">
+  <div class="e-fundo" aria-hidden="true">
+    <div class="e-paralelo" data-paralelo="80">
+      <Foto
+        src="projetos/residencia-caraca/capa.jpg"
+        alt=""
+        sizes="100vw"
+      />
+    </div>
+  </div>
+  <div class="e-veu" aria-hidden="true"></div>
+
+  <div class="e-manifesto-conteudo">
+    <p class="e-t-4 e-manifesto-fala">
+      <span class="e-linha"><Dividido texto="A obra é a" /></span>
+      <span class="e-linha"><Dividido texto="continuação" atraso={170} /></span>
+      <span class="e-linha"><Dividido texto="do projeto" atraso={340} /></span>
+    </p>
+
+    <p class="e-manifesto-assinatura" data-entrada style="--atraso:620ms">
+      <span class="e-l1">Método de trabalho</span>
+      <span class="e-l1">{site.nome}</span>
+    </p>
+  </div>
+</section>

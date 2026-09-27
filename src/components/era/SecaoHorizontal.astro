@@ -1,0 +1,166 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Foto from '../midia/Foto.astro';
+import Dividido from './Dividido.astro';
+import BotaoCircular from './BotaoCircular.astro';
+import Ornamento from './Ornamento.astro';
+
+/* Seção horizontal fixada: a tela gruda no topo e a faixa com três slides
+   (estúdio → obras → percurso) desliza conforme a rolagem vertical.
+   Arranque, grades e proporções seguem a referência; os dados são do studio. */
+interface Props {
+  obras: CollectionEntry<'projetos'>[];
+  intro: { src: string; alt: string };
+}
+
+const { obras, intro } = Astro.props;
+
+// Pontos do percurso (5 obras em ordem cronológica), alinhados à curva do SVG.
+const pontos = obras.map((obra, i) => {
+  const total = obras.length;
+  const x = total > 1 ? 4 + (i * 92) / (total - 1) : 50;
+  const curva = [78, 66, 55, 44, 26, 18];
+  const y = curva[Math.min(i, curva.length - 1)];
+  return { x, y, titulo: obra.data.titulo, ano: obra.data.ano, local: obra.data.local };
+});
+---
+
+<section class="e-secao e-h-area" data-horizontal data-tema="escuro">
+  <div class="e-h-tela">
+    <div class="e-h-faixa" data-faixa>
+      <!-- 1 · estúdio ------------------------------------------------------->
+      <article class="e-slide e-slide--info">
+        <Ornamento classe="e-orno e-flor e-flor--info" />
+
+        <div class="e-info">
+          <div class="e-info-topo" aria-hidden="true"></div>
+
+          <div class="e-info-meio">
+            <div class="e-grade">
+              <p class="e-info-rotulo e-l1" data-entrada>O estúdio</p>
+            </div>
+            <div class="e-grade">
+              <p class="e-info-fala e-t-4">
+                <span class="e-linha"><Dividido texto="Arquitetura que" /></span>
+                <span class="e-linha"><Dividido texto="começa na conversa" atraso={150} /></span>
+                <span class="e-linha"><Dividido texto="e termina no uso" atraso={300} /></span>
+                <span class="e-linha"><Dividido texto="cotidiano" atraso={450} /></span>
+              </p>
+            </div>
+          </div>
+
+          <div class="e-info-base">
+            <div class="e-grade">
+              <div class="e-info-desc">
+                <p class="e-p1" data-entrada style="--atraso:520ms">
+                  O escritório é pequeno de propósito: poucos projetos ao mesmo tempo,
+                  acompanhamento próximo da obra e uma mesa onde maquete, planta e
+                  conversa ocupam o mesmo lugar.
+                </p>
+                <span data-entrada style="--atraso:640ms">
+                  <Ornamento classe="e-orno e-orno--p" />
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2 · obras --------------------------------------------------------->
+      <article class="e-slide e-slide--intro">
+        <Ornamento classe="e-orno e-flor e-flor--intro" />
+
+        <div class="e-grade g13 e-intro">
+          <p class="e-intro-cap e-c1" data-entrada>São Paulo</p>
+
+          <div class="e-intro-titulo">
+            <h2 class="e-t-1">
+              <span class="e-linha e-linha--1" data-linha="210"><Dividido texto="Feitas" /></span>
+              <span class="e-linha e-linha--2" data-linha="-170"><Dividido texto="para" atraso={150} /></span>
+              <span class="e-linha e-linha--3" data-linha="250"><Dividido texto="durar" atraso={300} /></span>
+            </h2>
+          </div>
+
+          <div class="e-intro-img e-foto" data-foto>
+            <div class="e-paralelo" data-paralelo="64">
+              <Foto src={intro.src} alt={intro.alt} sizes="(min-width: 768px) 42vw, 90vw" />
+            </div>
+          </div>
+
+          <div class="e-intro-desc">
+            <h3 class="e-t-5" data-entrada style="--atraso:120ms">
+              Poucos projetos,<br />muita atenção
+            </h3>
+            <p class="e-p1" data-entrada style="--atraso:260ms">
+              Preferimos poucos materiais bem resolvidos a um catálogo inteiro, e
+              tratamos a obra como continuação do projeto — não como uma etapa à
+              parte.
+            </p>
+          </div>
+
+          <div class="e-intro-btn" data-entrada style="--atraso:380ms">
+            <BotaoCircular href="/projetos" rotulo="Ver projetos" />
+          </div>
+        </div>
+      </article>
+
+      <!-- 3 · percurso ------------------------------------------------------>
+      <article class="e-slide e-slide--path">
+        <Ornamento classe="e-orno e-flor e-flor--path" />
+
+        <div class="e-path">
+          <div class="e-grade e-path-topo">
+            <div class="e-path-titulo">
+              <span class="e-t-3 e-linha" data-linha="140">
+                <Dividido texto="De São Paulo" />
+              </span>
+              <span class="e-a1 e-path-acento">
+                <Dividido texto="para" atraso={160} />
+              </span>
+              <span class="e-t-3 e-linha e-path-fim" data-linha="-110">
+                <Dividido texto="o mundo" atraso={320} />
+              </span>
+            </div>
+          </div>
+
+          <div class="e-grade e-path-base">
+            <div class="e-percurso">
+              <svg
+                class="e-percurso-svg"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4 78 C 12 74 19 71 27 66 C 35 61 42 59 50 55 C 58 51 65 49 73 44 C 81 39 88 33 96 26"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  vector-effect="non-scaling-stroke"></path>
+              </svg>
+
+              <span class="e-percurso-flor" aria-hidden="true">
+                <Ornamento classe="e-orno e-orno--p" />
+              </span>
+
+              <ol class="e-percurso-lista">
+                {
+                  pontos.map((ponto, i) => (
+                    <li
+                      class="e-percurso-item"
+                      style={`--x:${ponto.x}%; --y:${ponto.y}%; --atraso:${520 + i * 110}ms`}
+                      data-entrada
+                    >
+                      <span class="e-l1">{ponto.titulo}</span>
+                      <span class="e-l2">{ponto.local.split(',')[0]} · {ponto.ano}</span>
+                    </li>
+                  ))
+                }
+              </ol>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

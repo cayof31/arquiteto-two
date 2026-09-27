@@ -1,0 +1,163 @@
+---
+/* Motor da home: revelações, parallax de imagens, número de progresso,
+   troca de tema do chrome fixo e a faixa horizontal (sticky + lerp).
+   Só roda nesta página; tudo é defensivo caso os elementos não existam. */
+---
+
+<script>
+  const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const area = document.querySelector<HTMLElement>('[data-horizontal]');
+  const faixa = area?.querySelector<HTMLElement>('[data-faixa]');
+  const mq = window.matchMedia('(min-width: 768px)');
+  const linhas = Array.from(document.querySelectorAll<HTMLElement>('[data-linha]'));
+  const paralelos = Array.from(document.querySelectorAll<HTMLElement>('[data-paralelo]'));
+  const contador = document.querySelector<HTMLElement>('[data-contador]');
+  const chrome = document.querySelector<HTMLElement>('.e-chrome');
+  const tematicos = Array.from(document.querySelectorAll<HTMLElement>('[data-tema]'));
+
+  const preso = (valor: number) => (valor < 0 ? 0 : valor > 1 ? 1 : valor);
+
+  /* ------------------------------- revelações ------------------------------ */
+  const alvos = document.querySelectorAll<HTMLElement>('[data-entrada], [data-texto], [data-foto]');
+  if (semMovimento) {
+    alvos.forEach((el) => el.classList.add('visivel'));
+  } else {
+    const observador = new IntersectionObserver(
+      (entradas) => {
+        entradas.forEach((entrada) => {
+          if (!entrada.isIntersecting) return;
+          entrada.target.classList.add('visivel');
+          observador.unobserve(entrada.target);
+        });
+      },
+      /* Sem margem negativa: dentro da faixa fixada os elementos não sobem
+         mais na tela — só deslizam na horizontal — e ficariam presos abaixo
+         da linha de gatilho (mesma leitura de "entra na tela" da referência). */
+      { rootMargin: '0px', threshold: 0 },
+    );
+    alvos.forEach((el) => observador.observe(el));
+  }
+
+  /* --------------------------- faixa horizontal ---------------------------- */
+  let altura = 0;
+  let destino = 0;
+  let atual = 0;
+  let pendente = false;
+
+  function aplicar() {
+    if (faixa && mq.matches) {
+      faixa.style.transform = `translate3d(${atual.toFixed(2)}px, 0, 0)`;
+    }
+  }
+
+  function calcular() {
+    if (!area || !faixa || !mq.matches) return;
+    altura = faixa.scrollWidth;
+    const percurso = altura - window.innerHeight;
+    const p = percurso > 0 ? preso(-area.getBoundingClientRect().top / percurso) : 0;
+    destino = -Math.max(0, altura - window.innerWidth) * p;
+  }
+
+  function parallax() {
+    if (semMovimento) return;
+    const vh = window.innerHeight;
+    paralelos.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -240 || r.top > vh + 240) return;
+      const forca = Number(el.dataset.paralelo ?? 0);
+      const meio = (r.top + r.height / 2 - vh / 2) / vh;
+      el.style.transform = `translate3d(0, ${(-meio * forca).toFixed(1)}px, 0)`;
+    });
+  }
+
+  function contar() {
+    if (!contador) return;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const p = total > 0 ? preso(window.scrollY / total) : 0;
+    const texto = String(Math.round(p * 100)).padStart(2, '0');
+    if (contador.textContent !== texto) contador.textContent = texto;
+  }
+
+  function tema() {
+    if (!chrome) return;
+    const amostra = 56;
+    let claro = false;
+    for (const secao of tematicos) {
+      const r = secao.getBoundingClientRect();
+      if (r.top <= amostra && r.bottom > amostra) {
+        claro = secao.dataset.tema === 'claro';
+        break;
+      }
+    }
+    chrome.classList.toggle('e-chrome--claro', claro);
+  }
+
+  function passo() {
+    pendente = false;
+    if (mq.matches) {
+      const dif = destino - atual;
+      if (!semMovimento && Math.abs(dif) > 0.4) atual += dif * 0.16;
+      else atual = destino;
+      aplicar();
+      if (atual !== destino) agendar();
+    }
+    // Parallax das linhas só com o trilho horizontal ativo (no celular os
+    // deslocamentos fixariam as linhas em −metade do alcance e estourariam).
+    if (mq.matches) {
+      const dist = Math.max(1, (altura || 1) - window.innerWidth);
+      const p = preso(-atual / dist);
+      linhas.forEach((linha) => {
+        const f = Number(linha.dataset.linha ?? 0);
+        if (f) linha.style.transform = `translate3d(${((p - 0.5) * f).toFixed(1)}px, 0, 0)`;
+      });
+    }
+    parallax();
+    contar();
+    tema();
+  }
+
+  function agendar() {
+    if (pendente) return;
+    pendente = true;
+    requestAnimationFrame(passo);
+  }
+
+  function medir() {
+    if (!area || !faixa) return;
+    if (!mq.matches) {
+      area.style.height = '';
+      faixa.style.transform = '';
+      linhas.forEach((linha) => (linha.style.transform = ''));
+      return;
+    }
+    altura = faixa.scrollWidth;
+    area.style.height = `${altura}px`;
+    calcular();
+    atual = destino;
+    aplicar();
+  }
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      calcular();
+      agendar();
+    },
+    { passive: true },
+  );
+  window.addEventListener('resize', () => {
+    medir();
+    agendar();
+  });
+  window.addEventListener('load', () => {
+    medir();
+    agendar();
+  });
+  document.fonts?.ready.then(() => {
+    medir();
+    agendar();
+  });
+
+  medir();
+  agendar();
+</script>

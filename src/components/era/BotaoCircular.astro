@@ -1,0 +1,19 @@
+---
+/* Botão circular de contorno (equivalente ao botão redondo da referência). */
+interface Props {
+  href: string;
+  rotulo: string;
+  externo?: boolean;
+}
+
+const { href, rotulo, externo = false } = Astro.props;
+---
+
+<a
+  class="e-botao-c"
+  href={href}
+  target={externo ? '_blank' : undefined}
+  rel={externo ? 'noopener' : undefined}
+>
+  <span class="e-l1">{rotulo}</span>
+</a>

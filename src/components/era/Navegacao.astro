@@ -1,0 +1,25 @@
+---
+import { site, mensagemWhatsapp } from '../../config/site';
+import { linkWhatsapp } from '../../lib/whatsapp';
+
+/* Navegação fixa no canto superior direito: chamada em serifa display com
+   sublinhado + links miúdos, como na referência. */
+const whatsapp = linkWhatsapp(mensagemWhatsapp);
+---
+
+<nav class="e-nav" aria-label="Navegação principal">
+  <a class="e-nav-principal" href="/projetos">Ver os<br />projetos</a>
+  <ul class="e-nav-lista">
+    <li>
+      <a class="e-l1" href={whatsapp} target="_blank" rel="noopener">WhatsApp</a>
+    </li>
+    <li>
+      <a class="e-l1" href="#contato">Contato</a>
+    </li>
+    <li>
+      <a class="e-l1" href={site.instagramUrl} target="_blank" rel="noopener noreferrer">
+        Instagram
+      </a>
+    </li>
+  </ul>
+</nav>

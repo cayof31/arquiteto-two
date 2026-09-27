@@ -11,16 +11,33 @@ interface Props {
   canonico?: string;
   imagemOg?: string;
   estruturados?: object[];
-  /** A home horizontal tem o contato como último painel: oculta o rodapé. */
+  /** A home tem o contato como último bloco: oculta o rodapé. */
   rodape?: boolean;
+  /**
+   * Cabeçalho global. `true` (padrão) mostra sempre, `false` oculta e
+   * `'mobile'` mostra apenas abaixo do breakpoint — a home tem chrome próprio
+   * no desktop e mantém o menu responsivo no celular.
+   */
+  cabecalho?: boolean | 'mobile';
 }
 
-const { titulo, descricao, canonico, imagemOg, estruturados = [], rodape = true } = Astro.props;
+const {
+  titulo,
+  descricao,
+  canonico,
+  imagemOg,
+  estruturados = [],
+  rodape = true,
+  cabecalho = true,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="e-sem-js">
   <head>
+    <script is:inline>
+      document.documentElement.classList.remove('e-sem-js');
+    </script>
     <Meta titulo={titulo} descricao={descricao} canonico={canonico} imagemOg={imagemOg} />
     <DadosEstruturados fichas={estruturados} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -32,7 +49,15 @@ const { titulo, descricao, canonico, imagemOg, estruturados = [], rodape = true 
     >
       Pular para o conteúdo
     </a>
-    <Header />
+    {
+      cabecalho === 'mobile' ? (
+        <div class="cabecalho-mobile">
+          <Header />
+        </div>
+      ) : (
+        cabecalho && <Header />
+      )
+    }
     <main id="conteudo">
       <slot />
     </main>

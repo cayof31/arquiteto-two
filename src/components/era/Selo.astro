@@ -1,0 +1,22 @@
+---
+import { site } from '../../config/site';
+import Ornamento from './Ornamento.astro';
+
+/* Selo circular giratório no canto superior esquerdo (o "logo em anel" da referência). */
+const anel = `${site.nome} · arquitetura · ${site.cidade} · `.toUpperCase();
+---
+
+<a class="e-selo" href="/" aria-label={`${site.nome} — início`}>
+  <svg class="e-selo-anel" viewBox="0 0 100 100" aria-hidden="true">
+    <defs>
+      <path
+        id="e-anel-selo"
+        d="M50 50 m-37 0 a37 37 0 1 1 74 0 a37 37 0 1 1 -74 0"
+        fill="none"></path>
+    </defs>
+    <text>
+      <textPath href="#e-anel-selo">{anel}</textPath>
+    </text>
+  </svg>
+  <Ornamento classe="e-selo-orno" />
+</a>
