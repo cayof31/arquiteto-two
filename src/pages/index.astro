@@ -24,8 +24,9 @@ const urlSite = Astro.site?.href.replace(/\/$/, '') ?? '';
 ---
 
 <Base
-  titulo={`${site.arquiteta} — ${site.nome} | Site para arquiteto`}
+  titulo={`${site.nome} | Arquitetura e Interiores`}
   descricao={site.descricaoCurta}
+  imagemOg="https://studio-suzana-loroff-midia.cayofelipe31.workers.dev/suzana/nova.jpg?w=1440"
   estruturados={[fichaPessoa(urlSite), fichaEscritorio(urlSite)]}
   rodape={false}
   cabecalho="mobile"
