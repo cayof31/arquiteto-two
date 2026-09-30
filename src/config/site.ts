@@ -4,7 +4,7 @@ export const site = {
   nomeCurto: 'Loroff',
   cargo: 'Arquiteta',
   descricaoCurta:
-    'Studio de arquitetura em São Paulo. Projetos residenciais e de hospitalidade com foco em materialidade, luz e o modo de viver de quem habita.',
+    'Studio de arquitetura em São Paulo. Projetos residenciais e de comercial com foco em materialidade, luz e o modo de viver de quem habita.',
   manifesto:
     'Arquitetura que começa na conversa e termina no uso cotidiano.',
   bio: [
@@ -13,18 +13,18 @@ export const site = {
   ],
   filosofia:
     'Projetamos espaços que envelhecem bem. Preferimos poucos materiais bem resolvidos a um catálogo inteiro, e tratamos a obra como continuação do projeto — não como uma etapa à parte.',
-  telefoneWhatsapp: '5511999999999',
-  telefoneExibicao: '(11) 99999-9999',
-  email: 'contato@studiosuzanaloroff.exemplo',
-  instagram: '@studiosuzanaloroff',
-  instagramUrl: 'https://www.instagram.com/',
+  telefoneWhatsapp: '5566992717650',
+  telefoneExibicao: '(66) 99271-7650',
+  email: 'contato@ibagtech.com.br',
+  instagram: '@ibagtech',
+  instagramUrl: 'https://www.instagram.com/ibagtech',
   cidade: 'São Paulo',
   uf: 'SP',
   endereco: 'Vila Madalena, São Paulo — SP',
   anoFundacao: 2014,
   anosAtuacao: 12,
   projetosRealizados: 40,
-  microSassUrl: 'https://ibagtech.com.br',
+  criadorUrl: 'https://ibagtech.com.br',
   autorSite: 'IbagTech',
   fotos: {
     retrato: {
@@ -43,4 +43,4 @@ export const site = {
 } as const;
 
 export const mensagemWhatsapp =
-  'Olá, Suzana. Vi o site do Studio Suzana Loroff e gostaria de conversar sobre um projeto.';
+  'Olá, Cayo. Vi o site do Studio Suzana Loroff e gostaria de conversar sobre um site para o meu negocio.';

@@ -1,0 +1,108 @@
+---
+/* Faixa de números sobre tinta — o "apart-type" da referência (data list com
+   label + valor grande), aqui com contagem crescente quando entra na tela
+   (data-conta animado pelo Motor; sem JS ou com movimento reduzido o valor
+   final já está no HTML). */
+
+const numeros = [
+  { valor: 40, pad: 2, rotulo: 'projetos realizados', sufixo: '' },
+  { valor: 12, pad: 2, rotulo: 'anos de atuação', sufixo: '' },
+  { valor: 4, pad: 2, rotulo: 'etapas do desenho à obra', sufixo: '' },
+  { valor: 100, pad: 3, rotulo: 'de obras acompanhadas', sufixo: '%' },
+];
+---
+
+<section class="e-secao e-numeros" data-tema="claro" id="numeros" aria-label="O estúdio em números">
+  <h2 class="e-t-5 e-numeros-titulo" data-entrada>O estúdio, em números</h2>
+
+  <ul class="e-numeros-lista">
+    {
+      numeros.map((item, i) => (
+        <li data-entrada style={`--atraso:${i * 120}ms`}>
+          <span class="e-numeros-valor">
+            <span data-conta={item.valor} data-conta-pad={item.pad}>
+              {String(item.valor).padStart(item.pad, '0')}
+            </span>
+            {item.sufixo && <i class="e-numeros-sufixo">{item.sufixo}</i>}
+          </span>
+          <span class="e-l1 e-numeros-rotulo">{item.rotulo}</span>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .e-numeros {
+    background: var(--color-tinta);
+    color: var(--color-papel);
+    padding: clamp(5rem, 15vh, 10rem) var(--offset);
+  }
+
+  .e-numeros-titulo {
+    text-align: center;
+    margin-bottom: clamp(2.5rem, 7vh, 5rem);
+    color: color-mix(in srgb, var(--color-papel) 78%, transparent);
+  }
+
+  .e-numeros-lista {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: min(100%, calc(var(--cel) * 9));
+    border-top: 1px solid color-mix(in srgb, var(--color-papel) 25%, transparent);
+  }
+
+  .e-numeros-lista li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--u-16);
+    text-align: center;
+    padding: var(--u-48) var(--u-16) 0;
+  }
+
+  .e-numeros-lista li + li {
+    border-left: 1px solid color-mix(in srgb, var(--color-papel) 25%, transparent);
+  }
+
+  .e-numeros-valor {
+    font-family: var(--display);
+    font-size: var(--h3);
+    line-height: 0.9167;
+    letter-spacing: -0.024em;
+    font-variant-numeric: lining-nums tabular-nums;
+    text-transform: uppercase;
+  }
+
+  .e-numeros-sufixo {
+    font-style: normal;
+    font-size: 0.5em;
+    vertical-align: 0.48em;
+    letter-spacing: 0;
+    color: var(--color-terracota);
+  }
+
+  .e-numeros-rotulo {
+    color: color-mix(in srgb, var(--color-papel) 62%, transparent);
+    max-width: 18ch;
+  }
+
+  @media (max-width: 767px) {
+    .e-numeros-lista {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .e-numeros-lista li:nth-child(odd) {
+      border-left: 0;
+    }
+
+    .e-numeros-lista li:nth-child(n + 3) {
+      border-top: 1px solid color-mix(in srgb, var(--color-papel) 25%, transparent);
+      margin-top: var(--u-32);
+      padding-top: var(--u-32);
+    }
+  }
+</style>

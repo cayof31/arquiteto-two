@@ -3,7 +3,12 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import '../styles/era.css';
 import Hero from '../components/era/Hero.astro';
+import Motivos from '../components/era/Motivos.astro';
 import Manifesto from '../components/era/Manifesto.astro';
+import Cifra from '../components/era/Cifra.astro';
+import Numeros from '../components/era/Numeros.astro';
+import Conceito from '../components/era/Conceito.astro';
+import Processo from '../components/era/Processo.astro';
 import SecaoHorizontal from '../components/era/SecaoHorizontal.astro';
 import ContatoEra from '../components/era/ContatoEra.astro';
 import Moldura from '../components/era/Moldura.astro';
@@ -27,7 +32,9 @@ const urlSite = Astro.site?.href.replace(/\/$/, '') ?? '';
 >
   <div class="pagina-era">
     <Hero />
+    <Motivos />
     <Manifesto />
+    <Cifra />
 
     <SecaoHorizontal
       obras={todas}
@@ -37,6 +44,8 @@ const urlSite = Astro.site?.href.replace(/\/$/, '') ?? '';
         alt: 'Casa com pátios e vegetação, vista da sala para o quintal',
       }}
     />
+
+    <Conceito />
 
     <ContatoEra />
 
@@ -53,10 +62,10 @@ const urlSite = Astro.site?.href.replace(/\/$/, '') ?? '';
 
 <style is:global>
   html {
-    scrollbar-width: none;
+    /* scrollbar-width: none; */
   }
 
   html::-webkit-scrollbar {
-    display: none;
+    /* display: none; */
   }
 </style>

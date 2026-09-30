@@ -1,0 +1,192 @@
+---
+/* Arco de saída: a seção terracota que sobe sobre o hero fixado (a margem
+   negativa a sobrepõe ao último viewport do pin), com o título curvo no
+   auge do arco e os três motivos — o equivalente ao arco da referência,
+   na cor do projeto. */
+---
+
+<section
+  class="e-secao e-arco"
+  data-tema="claro"
+  data-cabeca="escuro"
+  id="motivos"
+  aria-label="Três motivos para escolher o estúdio"
+>
+  <div class="e-arco-forma">
+    <svg
+      class="e-arco-curva"
+      viewBox="0 0 780 390"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <path id="e-arco-percurso" d="M 62 388 A 328 328 0 0 1 718 388" fill="none" />
+      </defs>
+      <text class="e-arco-texto">
+        <textPath href="#e-arco-percurso" startOffset="50%" text-anchor="middle"
+          >TRÊS MOTIVOS PARA ESCOLHER O ESTÚDIO</textPath
+        >
+      </text>
+    </svg>
+
+    <ol class="e-arco-lista">
+      <li class="e-arco-item">
+        <span class="e-arco-num">01</span>
+        <h2 class="e-t-5">Projeto autoral</h2>
+        <p>Cada obra nasce do terreno, da luz e de quem vai morar nela.</p>
+      </li>
+      <li class="e-arco-item">
+        <span class="e-arco-num">02</span>
+        <h2 class="e-t-5">Detalhe sob medida</h2>
+        <p>Da esquadria à marcenaria, tudo desenhado para o lugar.</p>
+      </li>
+      <li class="e-arco-item">
+        <span class="e-arco-num">03</span>
+        <h2 class="e-t-5">Obra acompanhada</h2>
+        <p>Do primeiro traço à última peça, o escritório está no canteiro.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<style>
+  .e-arco {
+    position: relative;
+    z-index: 3;
+    /* sobrepõe o último viewport do hero fixado — a conta fecha com a tela
+       de 100vh: a margem e a altura do pin usam a mesma unidade */
+    height: 250vh;
+    margin-top: -100vh;
+    margin-top: -100vh;
+  }
+  
+  .e-arco-forma { 
+    --arco-w: min(100vw, 1980px);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--arco-w);
+    height: 100%;
+    background: #6c9cdb;
+    background-image: url("/hero_branca_sem_fundo.png");
+    background-size: contain;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    color: var(--color-papel);
+    /* topo semicircular: raio = metade da largura */
+    border-radius: calc(var(--arco-w) / 2) calc(var(--arco-w) / 2) 0 0;
+  }
+
+  /* título curvo colado no auge do arco (mesma caixa do semicírculo) */
+  .e-arco-curva {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .e-arco-texto {
+    font-family: var(--display);
+    font-size: 16px;
+    letter-spacing: 6px;
+    fill: currentColor;
+  }
+
+  .e-arco-lista {
+    position: absolute;
+    top: calc(var(--arco-w) * 0);
+    bottom: calc(var(--cel) * 5.1);
+    
+    /* 1. CENTRALIZA A CAIXA NA TELA */
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* 2. LARGURA CONTROLADA (reduzida para 1 coluna não ficar muito esticada no desktop) */
+    width: min(100% - var(--u-48) * 2, 500px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    
+    /* 3. EMPILHAMENTO VERTICAL (DE CIMA PARA BAIXO) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--u-48);
+  }
+
+  .e-arco-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--u-16);
+    border-top: 1px solid color-mix(in srgb, var(--color-papel) 35%, transparent);
+    padding-top: var(--u-32);
+  }
+
+  .e-arco-num {
+    font-family: var(--corpo);
+    font-size: var(--l1);
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    opacity: 0.65;
+  }
+
+  .e-arco-item p {
+    margin: 0;
+    font-size: var(--p1);
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--color-papel) 82%, transparent);
+    max-width: 34ch;
+  }
+
+  @media (max-width: 767px) {
+    /* Sobe uma tela inteira sobre o hero grudado (top: -100vh, altura 200vh).
+       O miolo continua a composição do celular, sem o vazio de 250vh. */
+    .e-arco {
+      height: auto;
+      margin-top: -100vh;
+      z-index: 3;
+    }
+
+    .e-arco-forma {
+      --arco-w: 100%;
+      position: relative;
+      left: auto;
+      transform: none;
+      width: 100%;
+      height: auto;
+      min-height: 100svh;
+      border-radius: 46vw 46vw 0 0;
+      padding: 7.5rem 1.35rem 2.5rem;
+      /* background-size: min(88vw, 380px) auto;   */
+      background-position: center bottom;
+    }
+
+    .e-arco-curva {
+      position: relative;
+      width: 100%;
+    }
+
+    .e-arco-texto {
+      font-size: 22px;
+      letter-spacing: 3px;
+    }
+
+    .e-arco-lista {
+      position: relative;
+      top: auto;
+      bottom: auto;
+      left: auto;
+      transform: none;
+      width: 100%;
+      height: auto;
+      margin-top: 0.5rem;
+      padding-bottom: 34vw;
+      gap: 1.5rem;
+      justify-content: flex-start;
+    }
+  }
+</style>

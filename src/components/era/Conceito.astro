@@ -1,0 +1,190 @@
+---
+import Foto from '../midia/Foto.astro';
+import Dividido from './Dividido.astro';
+
+/* Declaração fixada com fotos em parallax — o "THE CONCEPT" da referência:
+   a tela fica presa (sticky) enquanto a frase se revela e as fotos deslizam
+   com o progresso do pin (--p-pin alimentado pelo Motor via data-scrub). */
+---
+
+<section class="e-secao e-conceito" data-tema="escuro" id="conceito" data-pino>
+  <div class="e-conceito-tela">
+    <figure class="e-conceito-foto e-conceito-foto--a e-foto" data-foto data-scrub="180">
+      <Foto
+        src="projetos/residencia-caraca/2.jpg"
+        alt="Sala com pátio e vegetação vista de dentro da residência"
+        sizes="(max-width: 767px) 44vw, 22vw"
+      />
+    </figure>
+    <figure class="e-conceito-foto e-conceito-foto--b e-foto" data-foto data-scrub="-140">
+      <Foto
+        src="projetos/hideout-leaf/3.jpg"
+        alt="Estrutura em madeira e vidro entre árvores"
+        sizes="(max-width: 767px) 46vw, 26vw"
+      />
+    </figure>
+    <figure class="e-conceito-foto e-conceito-foto--c e-foto" data-foto data-scrub="110">
+      <Foto
+        src="projetos/dr-house/5.jpg"
+        alt="Detalhe de luz sobre parede texturizada"
+        sizes="(max-width: 767px) 32vw, 15vw"
+      />
+    </figure>
+
+    <div class="e-conceito-conteudo">
+      <p class="e-l1" data-entrada>O conceito</p>
+
+      {/* --base = em que ponto do pin (0→1) cada linha começa a se escrever */}
+      <p class="e-conceito-fala e-t-4">
+        <span class="e-linha" style="--base:.04">
+          <Dividido texto="Arquitetura que começa" />
+        </span>
+        <span class="e-linha" style="--base:.16">
+          <Dividido texto="na conversa e termina" atraso={170} />
+        </span>
+        <span class="e-linha" style="--base:.28">
+          <Dividido texto="no uso cotidiano" atraso={340} />
+        </span>
+      </p>
+
+      <p class="e-p1 e-conceito-apoio" data-entrada style="--atraso:640ms">
+        O trabalho parte do diálogo com quem vai morar — o terreno, a rotina, a luz
+        de cada estação — e só então vira desenho.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .e-conceito {
+    height: 300vh;
+    background: var(--color-papel);
+    color: var(--color-tinta);
+  }
+
+  .e-conceito-tela {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: clip;
+  }
+
+  .e-conceito-conteudo {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--u-32);
+    text-align: center;
+    padding-inline: var(--offset);
+  }
+
+  .e-conceito-fala {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .e-conceito-apoio {
+    max-width: 46ch;
+    color: var(--color-cinza);
+  }
+
+  /* --------------------- revelação da frase por scroll ----------------------
+     Cada letra é acionada pelo progresso do pin (--p-pin, publicado pelo
+     Motor), não por um reveal por tempo: a frase se escreve DURANTE a seção
+     fixada, como na referência, e responde igual a rolagem lenta, rápida ou
+     restaurada no meio. O IO do era.css ainda marca .visivel na entrada —
+     as regras abaixo vencem .dividido.visivel .letra e mantêm o scrub.
+     Sem JS ou com movimento reduzido, o era.css força as letras visíveis. */
+  :global(.e-conceito .dividido .letra) {
+    --ini: calc(var(--base, 0) + var(--i, 0) * 0.009);
+    --k: clamp(0, calc((var(--p-pin, 0) - var(--ini)) * 17), 1);
+    transition: opacity 0.12s linear, transform 0.12s linear;
+    opacity: var(--k);
+    transform:
+      translateY(calc((1 - var(--k)) * 0.42em))
+      rotateX(calc((1 - var(--k)) * -72deg));
+  }
+
+  :global(.e-conceito .dividido.visivel .letra) {
+    opacity: var(--k);
+    transform:
+      translateY(calc((1 - var(--k)) * 0.42em))
+      rotateX(calc((1 - var(--k)) * -72deg));
+  }
+
+  /* fotos flutuantes: a revelação (scale) vem do .e-foto e o deslize do scrub */
+  .e-conceito-foto {
+    position: absolute;
+    margin: 0;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  /* As três fotos ficam fora da caixa central da frase (medição: a linha mais
+     larga ocupa ~291–1149px em 1440 — as fotos param antes/depois disso). */
+  .e-conceito-foto--a {
+    top: 9%;
+    left: -2%;
+    width: min(19vw, 276px);
+    aspect-ratio: 3 / 4;
+  }
+
+  .e-conceito-foto--b {
+    bottom: 4%;
+    right: 3%;
+    width: min(22vw, 320px);
+    aspect-ratio: 4 / 3;
+  }
+
+  .e-conceito-foto--c {
+    top: 8%;
+    right: 15%;
+    width: min(12vw, 172px);
+    aspect-ratio: 1 / 1;
+  }
+
+  @media (max-width: 767px) {
+    .e-conceito {
+      height: 220svh;
+    }
+
+    .e-conceito-tela {
+      height: 100svh;
+      min-height: 0;
+    }
+
+    .e-conceito-foto--a {
+      top: 6.5rem;
+      left: 0.75rem;
+      width: 28vw;
+    }
+
+    .e-conceito-foto--b {
+      bottom: 4.5rem;
+      right: 0.75rem;
+      width: 34vw;
+    }
+
+    /* sem espaço para a terceira: some para não disputar com o texto */
+    .e-conceito-foto--c {
+      display: none;
+    }
+
+    .e-conceito-conteudo {
+      gap: var(--u-16);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .e-conceito-foto {
+      transition: none !important;
+    }
+  }
+</style>

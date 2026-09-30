@@ -9,6 +9,7 @@ interface Props {
   prioridade?: boolean;
   eager?: boolean;
   classe?: string;
+  isLocal?: boolean;
 }
 
 const locais = import.meta.glob<{ default: ImageMetadata }>(
@@ -16,7 +17,7 @@ const locais = import.meta.glob<{ default: ImageMetadata }>(
   { eager: true },
 );
 
-const { src, alt, sizes, prioridade = false, eager = false, classe = '' } = Astro.props;
+const { src, alt, sizes, prioridade = false, eager = false, classe = '', isLocal = false} = Astro.props;
 const base = import.meta.env.PUBLIC_IMAGE_BASE as string | undefined;
 const local = Object.entries(locais).find(([caminho]) =>
   caminho.endsWith(`/assets/${src}`) || caminho.endsWith(`/${src}`),
@@ -25,7 +26,7 @@ const classeImg = `h-full w-full ${classe || 'object-cover'}`;
 ---
 
 {
-  base ? (
+  base && !isLocal ? (
     <img
       src={urlMidia(base, src, 960)}
       srcset={srcsetMidia(base, src)}
@@ -36,12 +37,12 @@ const classeImg = `h-full w-full ${classe || 'object-cover'}`;
       fetchpriority={prioridade ? 'high' : 'auto'}
       decoding={prioridade ? 'sync' : 'async'}
     />
-  ) : local ? (
+  ) : local && isLocal ? (
     <Picture
       src={local}
       alt={alt}
       formats={['avif', 'webp']}
-      widths={[480, 960, 1440]}
+      widths={[480, 960,1980]}
       quality={80}
       sizes={sizes}
       loading={prioridade || eager ? 'eager' : 'lazy'}

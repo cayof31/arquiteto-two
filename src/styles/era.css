@@ -191,6 +191,7 @@
   justify-content: space-between;
   height: 100%;
   padding-block: var(--u-48);
+  padding-left: 10%;
 }
 
 .e-info-topo,
@@ -300,14 +301,21 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  width: 100vw;
   padding-block: var(--u-48);
+  padding-right: 300px;
 }
 
 .e-path-titulo {
-  grid-column: 3 / 10;
+  padding-top: 8rem;
+  grid-column: 4 / 9;
   grid-row: 1;
   display: flex;
   flex-direction: column;
+  /* Sem quebra: em 5 colunas "De São Paulo" partia em duas linhas, o título
+     ia a 520px e o space-between empurrava o percurso para fora da tela.
+     A linha pode vazar a coluna (centralizada), mas nunca ganhar altura. */
+  white-space: nowrap;
 }
 
 .e-path-acento {
@@ -320,7 +328,7 @@
 
 .e-path-fim {
   display: block;
-  margin-left: calc(var(--cel) * 0.9);
+  margin-left: calc(var(--cel) * 1.9);
 }
 
 .e-percurso {
@@ -328,6 +336,10 @@
   grid-row: 1;
   position: relative;
   height: calc(var(--cel) * 2);
+  /* 20% além da coluna: a largura extra vale para a caixa INTEIRA, então a
+     linha (svg 100%) e os rótulos (% desta caixa) continuam no mesmo sistema
+     de coordenadas — mexer aqui não descola nada. */
+  width: 120%;
 }
 
 .e-percurso-svg {
@@ -351,11 +363,17 @@
   position: absolute;
   left: var(--x);
   top: var(--y);
-  transform: translate(-50%, -100%);
+  /* Propriedade `translate` (e não `transform`): a revelação anima o
+     `transform` e o define como none — com o translate próprio o rótulo
+     mantém a ancoragem (base no ponto, centralizado) em qualquer estado. */
+  translate: -50% -100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
+  /* Respiro até a borda de baixo: a base do rótulo É o ponto da linha, e o
+     padding impede que o texto e o marcador fiquem rentes na curva. */
+  padding-bottom: 8px;
   text-align: center;
   white-space: nowrap;
 }
@@ -364,6 +382,7 @@
   content: '';
   position: absolute;
   left: 50%;
+  /* Base do rótulo = ponto da linha: o centro do marcador cai sobre a curva. */
   top: 100%;
   width: 7px;
   height: 7px;
@@ -375,8 +394,9 @@
 
 .e-percurso-flor {
   position: absolute;
-  /* No vão entre os rótulos de 50% e 73%, assentada sobre a curva. */
-  left: 65%;
+  /* Vão livre entre os rótulos de 50% e 73%, assentada sobre a curva
+     (em 55%/40% ela caía em cima de "Hideout Leaf Villa"). */
+  left: 61.5%;
   top: 49%;
   transform: translate(-50%, -50%);
   color: var(--color-tinta);
@@ -386,7 +406,7 @@
 /* --------------------------------- hero ----------------------------------- */
 
 .e-hero {
-  height: 100vh;
+  height: 160vh;
   min-height: 560px;
   display: flex;
   flex-direction: column;
@@ -508,7 +528,11 @@
 /* -------------------------------- contato --------------------------------- */
 
 .e-contato {
-  background: var(--color-tinta);
+  background: #212779;
+  /* background-image: url('/hero_escura_sem_fundo.png'); */
+  /* background-image: url("/hero_branca_sem_fundo.png"); */
+  position: relative;
+
   color: var(--color-papel);
   padding: clamp(5rem, 14vh, 9rem) var(--offset);
   display: flex;
@@ -517,15 +541,56 @@
   text-align: center;
   gap: var(--u-32);
 }
+.e-contato-foto{
+  position: absolute;
+  /* inset: 0; */
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+  opacity: 1;
+  z-index: 0;
+  /* transition: opacity 0.9s var(--curva); */
+}
+
+/* Desktop: a foto preenche o bloco como ele já é, por trás do texto.
+   cover guarda a proporção — width e height a 100% sem isso estica o arquivo. */
+@media (min-width: 768px) {
+  .e-contato-foto {
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    transform: none;
+    pointer-events: none;
+  }
+
+  .e-contato-foto picture,
+  .e-contato-foto img {
+    display: block;
+    width: 100%;
+    height: 140%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+
+  .e-contato > :not(.e-contato-foto) {
+    position: relative;
+    z-index: 1;
+  }
+}
+
 
 .e-contato-titulo {
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 1;
 }
 
 .e-contato-fala {
   max-width: 44ch;
+  z-index: 1;
   color: color-mix(in srgb, var(--color-papel) 78%, transparent);
 }
 
@@ -537,6 +602,8 @@
   text-transform: uppercase;
   text-decoration: underline;
   text-underline-offset: 0.18em;
+  z-index: 1;
+
   text-decoration-thickness: 1px;
   transition: color 0.4s var(--curva);
 }
@@ -550,6 +617,8 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--u-32);
+  z-index: 1;
+
 }
 
 .e-contato-links a {
@@ -570,6 +639,8 @@
   margin-top: var(--u-32);
   padding-top: var(--u-32);
   border-top: 1px solid color-mix(in srgb, var(--color-papel) 22%, transparent);
+  z-index: 1;
+
 }
 
 .e-contato-dados dt {
@@ -618,7 +689,16 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  animation: e-girar 34s linear infinite;
+  /* Sem animação automática: a rotação vem do Motor, colada no scroll. */
+}
+
+@keyframes e-girar {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .e-selo-anel text {
@@ -627,12 +707,6 @@
   font-weight: 700;
   letter-spacing: 0.3em;
   fill: currentColor;
-}
-
-@keyframes e-girar {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .e-nav {
@@ -748,7 +822,9 @@
 
 .e-moldura {
   position: absolute;
+  z-index: -20;
   inset: clamp(0.75rem, 1.6vw, 1.25rem);
+  pointer-events: none;
 }
 
 .e-moldura i {
@@ -813,7 +889,8 @@
   color: inherit;
   text-decoration: none;
   text-align: center;
-  overflow: clip;
+  z-index: 10;
+  transition: border 0.3s ease; /* Suaviza a troca da borda */
 }
 
 .e-botao-c span {
@@ -822,27 +899,66 @@
   transition: color 0.45s var(--curva);
 }
 
+/* anel tracejado do hover: 4 segmentos de 25% (2 brancos + 2 transparentes)
+   intercalados, pintados num conic-gradient e recortados na faixa do padding
+   (mask exclude) — assim o traço é controlado por nós, não pelo dashed do
+   browser, e a rotação anda pelo contorno do círculo. */
 .e-botao-c::before {
   content: '';
+  z-index: 99;
   position: absolute;
-  inset: 0;
+  inset: -1px; /* mesma caixa da borda do botão */
   border-radius: 50%;
-  background: currentColor;
-  transform: scale(0);
-  transition: transform 0.55s var(--curva);
+  padding: 2px; /* espessura do traço */
+  background: conic-gradient(
+    black 0 25%,
+    #0000 0 50%,
+    black 0 75%,
+    #0000 0
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
 }
 
 .e-botao-c:hover::before {
-  transform: scale(1);
+  opacity: 1;
+  animation: border-animation 4s linear infinite; /* Ajuste a velocidade se quiser */
 }
 
-.e-botao-c:hover span {
-  color: var(--color-papel);
+.e-botao-c:hover {
+  border-color: transparent; /* Deixa transparente em vez de 'none' para não pular o layout */
+}
+
+@keyframes border-animation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* @media (prefers-reduced-motion: reduce) {
+  .e-botao-c:hover::before {
+    animation: none;
+  }
+} */
+/* .e-botao-c:hover span {
+  border-color: var(--color-papel);
 }
 
 .e-botao-c[data-escuro]:hover span {
-  color: var(--color-tinta);
-}
+  border-color: var(--color-tinta);
+} */
 
 /* --------------------------- ornamentos e fotos --------------------------- */
 
@@ -905,6 +1021,31 @@
   width: calc(var(--cel) * 3.4);
 }
 
+.e-image {
+  position: absolute;
+  pointer-events: none;
+  /* Fio fino (non-scaling-stroke): ainda assim some atrás do texto e marca
+     o canto, como as flores da referência. */
+  /* opacity: 0.55; */
+}
+
+.e-image--info {
+  top: calc(var(--u-48) * -0.5);
+  left: calc(var(--offset) * 2);
+  width: calc(var(--cel) * 3);
+  height: calc(var(--cel) * 2.5);
+}
+
+.e-image--intro {
+  bottom: calc(var(--cel) * 0);
+  left: calc(var(--cel) * -1.2);
+  width: calc(var(--cel) * 3.4);
+  height: auto;
+  z-index: -1;
+
+  /* transform: rotate(90deg); */
+}
+
 /* -------------------------------- revelações ------------------------------ */
 
 [data-entrada] {
@@ -965,15 +1106,67 @@
     transition: none !important;
   }
 
-  .e-selo-anel,
+  /* .e-selo-anel,
   .e-indicador-fio::after {
     animation: none !important;
-  }
+  } */
 }
 
-/* ------------------------------- mobile ----------------------------------- */
+/* ------------------------------- mobile -----------------------------------
+   Não é o desktop reduzido. O menu flutua sobre a cena, cada trecho da faixa
+   vira uma tela vertical e o arco dos motivos cabe numa composição só. */
 
 @media (max-width: 767px) {
+  .cabecalho-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 60;
+  }
+
+  .e-intro {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: center;
+    gap: var(--u-32);
+  }
+  .cabecalho-mobile header {
+    background: transparent;
+    border-bottom-color: transparent;
+    color: var(--color-tinta);
+    backdrop-filter: none;
+    transition: color 0.35s ease, background-color 0.35s ease;
+  }
+
+  .cabecalho-mobile.e-cabeca--clara header,
+  .cabecalho-mobile.e-cabeca--clara header a {
+    color: var(--color-papel);
+  }
+
+  .cabecalho-mobile.e-cabeca--clara [data-menu-traco] {
+    background: var(--color-papel);
+  }
+
+  .cabecalho-mobile:has([aria-expanded='true']) header {
+    background: color-mix(in srgb, var(--color-papel) 96%, transparent);
+    color: var(--color-tinta);
+  }
+
+  .cabecalho-mobile:has([aria-expanded='true']) header a {
+    color: var(--color-tinta);
+  }
+
+  .cabecalho-mobile:has([aria-expanded='true']) [data-menu-traco] {
+    background: var(--color-tinta);
+  }
+
+  .e-manifesto {
+    height: 100svh;
+    min-height: 0;
+  }
+
   .e-h-tela {
     position: static;
     display: block;
@@ -983,21 +1176,43 @@
 
   .e-h-faixa {
     flex-direction: column;
-    padding-inline: var(--offset);
+    padding-inline: 1.25rem;
     transform: none !important;
   }
 
   .e-slide {
     width: auto !important;
+    min-height: 100svh;
     height: auto;
-    padding-block: clamp(3.5rem, 9vh, 6rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.75rem;
+    padding-block: 5.5rem 3.25rem;
+  }
+
+  .e-image--info {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: 42svh;
+    object-fit: cover;
+  }
+
+  /* a foto solta do desktop senta em cima da pilha; a imagem da grade fica. */
+  .e-image--intro {
+    display: none;
   }
 
   .e-info,
   .e-path {
     height: auto;
+    width: auto;
+    max-width: 100%;
     gap: var(--u-32);
     padding-block: 0;
+    padding-right: 0;
   }
 
   .e-info-topo {
@@ -1034,13 +1249,13 @@
   }
 
   .e-intro-cap {
-    grid-column: 1 / 3;
+    grid-column: 1 / -1;
     grid-row: auto;
     margin: 0;
   }
 
   .e-intro-titulo {
-    grid-column: 2 / -1;
+    grid-column: 1 / -1;
     grid-row: auto;
     align-self: start;
   }
@@ -1051,19 +1266,19 @@
   }
 
   .e-intro-img {
-    grid-column: 2 / -1;
+    grid-column: 1 / -1;
     grid-row: auto;
     aspect-ratio: 3 / 4;
   }
 
   .e-intro-desc {
-    grid-column: 2 / -1;
+    grid-column: 1 / -1;
     grid-row: auto;
     align-self: start;
   }
 
   .e-intro-btn {
-    grid-column: 2 / -1;
+    grid-column: 1 / -1;
     grid-row: auto;
     justify-self: start;
   }
@@ -1073,21 +1288,65 @@
     grid-row: auto;
   }
 
+  /* a curva do desktop não cabe: o título estourava (nowrap + 300px de
+     padding) e os rótulos, ancorados em %, saíam pela esquerda. */
+  .e-path-titulo {
+    white-space: normal;
+    padding-top: 0;
+  }
+
   .e-path-acento {
-    margin-left: calc(var(--cel) * 0.8);
+    margin-top: 0.15rem;
+    margin-left: 0.35rem;
   }
 
   .e-path-fim {
-    margin-left: calc(var(--cel) * 0.4);
+    margin-left: 0;
+  }
+
+  .e-slide .e-t-4 {
+    font-size: clamp(1.65rem, 7.4vw, 2.15rem);
+    line-height: 1.05;
+  }
+
+  .e-slide .e-p1 {
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 36ch;
   }
 
   .e-percurso {
-    height: calc(var(--cel) * 3);
-    margin-inline: calc(var(--offset) * -1);
+    width: 100%;
+    height: auto;
+    margin-inline: 0;
+  }
+
+  .e-percurso-svg,
+  .e-percurso-flor {
+    display: none;
+  }
+
+  .e-percurso-lista {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--u-32);
   }
 
   .e-percurso-item {
-    font-size: 0.9em;
+    position: static;
+    translate: none;
+    white-space: normal;
+    align-items: flex-start;
+    text-align: left;
+    font-size: 1em;
+    padding-bottom: 0;
+    max-width: 100%;
+  }
+
+  .e-percurso-item::after {
+    display: none;
   }
 
   .e-hero-linha {
@@ -1167,6 +1426,7 @@ html.e-sem-js .e-intro-img {
 }
 
 html.e-sem-js .e-percurso {
+  width: 100%;
   height: calc(var(--cel) * 2.4);
 }
 
@@ -1180,4 +1440,42 @@ html.e-sem-js .e-foto img {
   opacity: 1 !important;
   transform: none !important;
   transition: none !important;
+}
+
+/* ------------------------ abertura do hero (intro) ------------------------ */
+
+.e-chrome,
+.cabecalho-mobile {
+  transition: opacity 0.5s var(--curva);
+}
+
+/* trava o scroll e esconde o chrome enquanto a porta abre */
+html.e-abertura-ativa {
+  overflow: hidden;
+}
+
+html.e-abertura-ativa .e-chrome,
+html.e-abertura-ativa .cabecalho-mobile {
+  opacity: 0;
+}
+
+/* sem JS a porta nunca abre sozinha: o hero aparece direto, sem intro */
+html.e-sem-js .e-hero-recorte {
+  clip-path: none !important;
+  animation: none !important;
+}
+
+html.e-sem-js .e-abertura {
+  display: none;
+}
+
+html.e-sem-js .e-hero-conteudo,
+html.e-sem-js .hotspots-container {
+  opacity: 1 !important;
+}
+
+html.e-sem-js .e-hero-botao {
+  visibility: visible;
+  transform: translateX(-50%);
+  opacity: 1;
 }

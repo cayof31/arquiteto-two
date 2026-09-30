@@ -5,7 +5,7 @@ const ano = new Date().getFullYear();
 ---
 
 <footer class="mt-24 border-t border-linha">
-  <div class="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-3">
+  <div class="mx-auto grid max-w-5xl gap-10 px-5 py-14 md:grid-cols-3">
     <div>
       <p class="font-titulo text-2xl">{site.nome}</p>
       <p class="mt-4 max-w-sm text-sm leading-relaxed text-cinza">
@@ -41,9 +41,9 @@ const ano = new Date().getFullYear();
   </div>
 
   <div class="border-t border-linha px-5 py-6 text-xs text-cinza">
-    <p class="mx-auto max-w-6xl">
+    <p class="mx-auto max-w-5xl">
       © {ano} {site.nome} — produzido por
-      <a class="text-tinta underline-offset-2 hover:underline" href={site.microSassUrl} target="_blank" rel="noopener">
+      <a class="text-tinta underline-offset-2 hover:underline" href={site.criadorUrl} target="_blank" rel="noopener">
         {site.autorSite}
       </a>
     </p>

@@ -1,6 +1,6 @@
 ---
 titulo: Hideout Leaf Villa
-categoria: Hospitalidade
+categoria: comercial
 ano: 2026
 local: Sidemen, Indonésia
 descricao: Villa ecológica imersa na selva montanhosa de Bali, inspirada na queda orgânica de quatro folhas que formam coberturas esculturais em bambu, integrando espaços abertos, vidro curvo e ventilação passiva.

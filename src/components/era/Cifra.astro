@@ -1,0 +1,117 @@
+---
+import Foto from '../midia/Foto.astro';
+import Dividido from './Dividido.astro';
+import { site } from '../../config/site';
+
+/* Citação editorial em coluna dupla — a "quote" da referência, porém em
+   fundo claro e composição dividida (foto com parallax à direita) para não
+   repetir o formato de foto em tela cheia do Manifesto. */
+---
+
+<section class="e-secao e-cifra" data-tema="escuro" id="cifra" aria-label="Filosofia do studio">
+  <div class="e-cifra-grade">
+    <blockquote class="e-cifra-fala">
+      <span class="e-cifra-aspa" aria-hidden="true">“</span>
+      <p class="e-t-4">
+        <span class="e-linha"><Dividido texto="Projetamos espaços" /></span>
+        <span class="e-linha"><Dividido texto="que envelhecem bem:" atraso={170} /></span>
+        <span class="e-linha"><Dividido texto="poucos materiais," atraso={340} /></span>
+        <span class="e-linha"><Dividido texto="bem resolvidos" atraso={510} /></span>
+      </p>
+      <footer class="e-l1" data-entrada style="--atraso:720ms">
+        {site.arquiteta} · {site.cargo}
+      </footer>
+    </blockquote>
+
+    <figure class="e-cifra-foto e-foto" data-foto>
+      <div class="e-paralelo" data-paralelo="70">
+        <Foto
+          src="suzana/nova.jpg"
+          alt="Suzana Loroff no ateliê, ao lado de plantas e maquetes"
+          sizes="(max-width: 767px) 92vw, 34vw"
+        />
+      </div>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .e-cifra {
+    background: var(--color-papel);
+    color: var(--color-tinta);
+    padding: clamp(5rem, 16vh, 11rem) var(--offset);
+  }
+
+  .e-cifra-grade {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
+    gap: var(--u-48);
+    width: min(100%, calc(var(--cel) * 9));
+    margin-inline: auto;
+  }
+
+  .e-cifra-fala {
+    position: relative;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--u-32);
+  }
+
+  .e-cifra-fala p {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+  }
+
+  .e-cifra-aspa {
+    position: absolute;
+    top: -0.42em;
+    left: -0.06em;
+    font-family: var(--display);
+    font-size: calc(var(--h1) * 1.1);
+    line-height: 1;
+    color: var(--color-terracota);
+    pointer-events: none;
+  }
+
+  .e-cifra-fala footer {
+    color: var(--color-cinza);
+    padding-left: 0.4em;
+  }
+
+  .e-cifra-foto {
+    margin: 0;
+    aspect-ratio: 3 / 4;
+    max-height: 72vh;
+    justify-self: end;
+    width: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .e-cifra-grade {
+      grid-template-columns: 1fr;
+      gap: var(--u-48);
+    }
+
+    .e-cifra-foto {
+      aspect-ratio: 4 / 3;
+      max-height: none;
+      justify-self: stretch;
+    }
+
+    .e-cifra-aspa {
+      top: -0.34em;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .e-cifra-foto img {
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>

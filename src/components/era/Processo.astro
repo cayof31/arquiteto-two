@@ -1,0 +1,346 @@
+---
+import Foto from '../midia/Foto.astro';
+import Dividido from './Dividido.astro';
+
+/* Etapas do trabalho em slider — o "benefits" numerado da referência
+   (setas com número atual/próximo + barra de progresso, slides em
+   crossfade). Sem JS ou no celular os passos empilham e a paginação some. */
+
+const etapas = [
+  {
+    num: '01',
+    titulo: 'Conversa',
+    texto:
+      'O primeiro encontro levanta rotina, terreno e orçamento — o que não pode faltar vem antes do traço.',
+    src: 'suzana/atelier.jpg',
+    alt: 'Mesa de trabalho com plantas e maquete no ateliê',
+  },
+  {
+    num: '02',
+    titulo: 'Estudo',
+    texto:
+      'Plantas, maquete e luz: o desenho se testa em papel e em volume antes de virar carta técnica.',
+    src: 'projetos/casa-praca/planta-1.jpg',
+    alt: 'Planta do estudo preliminar com pátios e vegetação',
+  },
+  {
+    num: '03',
+    titulo: 'Projeto',
+    texto:
+      'Detalhamento, especificações e caderno de obra — cada junção é resolvida no desenho, não na pressa.',
+    src: 'projetos/dr-house/2.jpg',
+    alt: 'Interior com marcenaria sob medida e luz natural',
+  },
+  {
+    num: '04',
+    titulo: 'Canteiro',
+    texto:
+      'Acompanhamento semana a semana, do primeiro alicerce à última peça no lugar.',
+    src: 'projetos/armazem-medellin/4.jpg',
+    alt: 'Espaço construído com estrutura aparente e grandes vãos',
+  },
+];
+---
+
+<section class="e-secao e-proc" data-tema="claro" id="processo" data-processo>
+  <header class="e-proc-cabecalho">
+    <h2 class="e-t-4">
+      <span class="e-linha"><Dividido texto="Do encontro" /></span>
+      <span class="e-linha"><Dividido texto="ao canteiro" atraso={170} /></span>
+    </h2>
+    <p class="e-p1" data-entrada style="--atraso:420ms">
+      Quatro etapas, do primeiro café à última vistoria. O escritório acompanha
+      todas — sem repassar o projeto para terceiros no meio do caminho.
+    </p>
+  </header>
+
+  <div class="e-proc-caixa">
+    <div class="e-proc-slides">
+      {
+        etapas.map((etapa, i) => (
+          <article
+            class:list={['e-proc-painel', i === 0 && 'is-ativa']}
+            data-proc-painel
+            role="group"
+            aria-label={`Etapa ${etapa.num} de 04 — ${etapa.titulo}`}
+          >
+            <figure class="e-proc-img e-foto" data-foto>
+              <Foto src={etapa.src} alt={etapa.alt} sizes="(max-width: 767px) 92vw, 44vw" />
+            </figure>
+            <div class="e-proc-texto">
+              <span class="e-proc-num" aria-hidden="true">{etapa.num}</span>
+              <h3 class="e-t-5">{etapa.titulo}</h3>
+              <p class="e-p1">{etapa.texto}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="e-proc-pag">
+      <button type="button" class="e-proc-seta" data-proc-prev aria-label="Etapa anterior">
+        <span class="e-l1" data-proc-atual>01</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path
+            d="M10.5 3.5 6 8l4.5 4.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </button>
+
+      <span class="e-proc-fio" aria-hidden="true">
+        <i data-proc-barra></i>
+      </span>
+
+      <button type="button" class="e-proc-seta" data-proc-next aria-label="Próxima etapa">
+        <span class="e-l1" data-proc-prox>02</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path
+            d="M5.5 3.5 10 8l-4.5 4.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .e-proc {
+    background: var(--color-terracota);
+    color: var(--color-papel);
+    padding: clamp(5rem, 15vh, 10rem) var(--offset);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(2.5rem, 7vh, 5rem);
+  }
+
+  .e-proc-cabecalho {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--u-32);
+    text-align: center;
+  }
+
+  .e-proc-cabecalho h2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .e-proc-cabecalho p {
+    max-width: 52ch;
+    color: color-mix(in srgb, var(--color-papel) 82%, transparent);
+  }
+
+  .e-proc-caixa {
+    width: min(100%, calc(var(--cel) * 9));
+    display: flex;
+    flex-direction: column;
+    gap: var(--u-48);
+  }
+
+  /* grid empilhado: a caixa tem a altura do painel mais alto e os slides
+     fazem crossfade sem pular (translate apenas, como na referência) */
+  .e-proc-slides {
+    display: grid;
+  }
+
+  .e-proc-painel {
+    grid-area: 1 / 1;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+    align-items: center;
+    gap: var(--u-48);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1.2rem);
+    transition:
+      opacity 0.7s var(--curva),
+      transform 0.7s var(--curva),
+      visibility 0s linear 0.7s;
+  }
+
+  .e-proc-painel.is-ativa {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 0.7s var(--curva),
+      transform 0.7s var(--curva),
+      visibility 0s;
+  }
+
+  .e-proc-img {
+    margin: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .e-proc-texto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--u-16);
+  }
+
+  .e-proc-num {
+    font-family: var(--corpo);
+    font-size: var(--l1);
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    opacity: 0.65;
+  }
+
+  .e-proc-texto p {
+    margin: 0;
+    max-width: 40ch;
+    color: color-mix(in srgb, var(--color-papel) 82%, transparent);
+  }
+
+  /* --------------------------- paginação --------------------------------- */
+
+  .e-proc-pag {
+    display: flex;
+    align-items: center;
+    gap: var(--u-32);
+  }
+
+  .e-proc-seta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--u-16);
+    background: none;
+    border: 0;
+    padding: var(--u-16);
+    margin: calc(var(--u-16) * -1);
+    color: inherit;
+    cursor: pointer;
+    transition: opacity 0.3s var(--curva);
+  }
+
+  .e-proc-seta:hover {
+    opacity: 0.7;
+  }
+
+  .e-proc-seta:focus-visible {
+    outline: 2px solid var(--color-papel);
+    outline-offset: 4px;
+  }
+
+  .e-proc-fio {
+    position: relative;
+    flex: 1;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-papel) 35%, transparent);
+    overflow: clip;
+  }
+
+  .e-proc-fio i {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 25%;
+    background: var(--color-papel);
+    transition: width 0.6s var(--curva);
+  }
+
+  /* ------------------- sem JS e celular: tudo empilhado ------------------- */
+
+  @media (max-width: 767px) {
+    .e-proc-painel {
+      grid-area: auto;
+      grid-template-columns: 1fr;
+      gap: var(--u-32);
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition: none;
+      padding-block: var(--u-48);
+      border-top: 1px solid color-mix(in srgb, var(--color-papel) 25%, transparent);
+    }
+
+    .e-proc-painel:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .e-proc-pag {
+      display: none;
+    }
+  }
+
+  html.e-sem-js .e-proc-painel {
+    grid-area: auto;
+    grid-template-columns: 1fr;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: none;
+    padding-block: var(--u-48);
+    border-top: 1px solid color-mix(in srgb, var(--color-papel) 25%, transparent);
+  }
+
+  html.e-sem-js .e-proc-pag {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .e-proc-painel {
+      transition: none;
+    }
+
+    .e-proc-fio i {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  /* Slider defensivo: se algum elemento faltar, a seção fica estática. */
+  const caixa = document.querySelector<HTMLElement>('[data-processo]');
+  if (caixa) {
+    const paineis = Array.from(caixa.querySelectorAll<HTMLElement>('[data-proc-painel]'));
+    const anterior = caixa.querySelector<HTMLButtonElement>('[data-proc-prev]');
+    const proximo = caixa.querySelector<HTMLButtonElement>('[data-proc-next]');
+    const rotuloAtual = caixa.querySelector<HTMLElement>('[data-proc-atual]');
+    const rotuloProx = caixa.querySelector<HTMLElement>('[data-proc-prox]');
+    const barra = caixa.querySelector<HTMLElement>('[data-proc-barra]');
+    let indice = 0;
+
+    const dois = (n: number) => String(n).padStart(2, '0');
+
+    const ir = (novo: number) => {
+      if (!paineis.length) return;
+      indice = (novo + paineis.length) % paineis.length;
+      paineis.forEach((painel, i) => {
+        const ativo = i === indice;
+        painel.classList.toggle('is-ativa', ativo);
+        painel.setAttribute('aria-hidden', String(!ativo));
+      });
+      if (rotuloAtual) rotuloAtual.textContent = dois(indice + 1);
+      if (rotuloProx) rotuloProx.textContent = dois(((indice + 1) % paineis.length) + 1);
+      if (barra) barra.style.width = `${((indice + 1) / paineis.length) * 100}%`;
+    };
+
+    anterior?.addEventListener('click', () => ir(indice - 1));
+    proximo?.addEventListener('click', () => ir(indice + 1));
+    caixa.addEventListener('keydown', (evento) => {
+      if (evento.key === 'ArrowLeft') {
+        evento.preventDefault();
+        ir(indice - 1);
+      }
+      if (evento.key === 'ArrowRight') {
+        evento.preventDefault();
+        ir(indice + 1);
+      }
+    });
+
+    ir(0);
+  }
+</script>

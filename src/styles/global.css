@@ -28,7 +28,7 @@
 }
 
 @theme {
-  --color-papel: #f4efe6;
+  --color-papel: #ffffff;
   --color-tinta: #2c2416;
   --color-terracota: #8c4a32;
   --color-linha: #d9d0c3;
@@ -51,12 +51,24 @@
     scroll-behavior: smooth;
     scroll-padding-top: 5.5rem;
   }
+  ::-webkit-scrollbar-track {
+    /* display: none; */
+    /* color: white; */
+    background-color: black;
+    color: black;
+    /* scrollbar-color: black; */
+    /* scroll-margin: ; */
+  }
+  ::-webkit-scrollbar-thumb { 
+    background-color: white;
+  }
 
   body {
     background-color: var(--color-papel);
     color: var(--color-tinta);
     font-family: var(--font-texto);
     -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
   }
 
   h1,

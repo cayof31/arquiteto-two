@@ -12,10 +12,93 @@
   const linhas = Array.from(document.querySelectorAll<HTMLElement>('[data-linha]'));
   const paralelos = Array.from(document.querySelectorAll<HTMLElement>('[data-paralelo]'));
   const contador = document.querySelector<HTMLElement>('[data-contador]');
+  const anel = document.querySelector<HTMLElement>('.e-selo-anel');
   const chrome = document.querySelector<HTMLElement>('.e-chrome');
+  const cabeca = document.querySelector<HTMLElement>('.cabecalho-mobile');
   const tematicos = Array.from(document.querySelectorAll<HTMLElement>('[data-tema]'));
+  const heroi = document.querySelector<HTMLElement>('[data-heroi]');
+  const telaHeroi = heroi?.querySelector<HTMLElement>('.e-hero-tela');
+  const pinos = Array.from(document.querySelectorAll<HTMLElement>('[data-pino]'));
 
   const preso = (valor: number) => (valor < 0 ? 0 : valor > 1 ? 1 : valor);
+
+  /* ---------------------------- abertura ---------------------------------- */
+  /* A tela começa escura com a classe .e-abre; após o carregar, ela cai para
+     o arco abrir (CSS) e o scroll fica travado até a porta terminar. Com
+     movimento reduzido não há intro: .e-abre some no primeiro frame. */
+  (() => {
+    const el = document.querySelector<HTMLElement>('.e-hero-tela');
+    if (!el) return;
+    const tela: HTMLElement = el;
+
+    if (semMovimento) {
+      tela.classList.remove('e-abre');
+      return;
+    }
+
+    document.documentElement.classList.add('e-abertura-ativa');
+    let abriu = false;
+    const abrir = () => {
+      if (abriu) return;
+      abriu = true;
+      tela.classList.remove('e-abre');
+      window.setTimeout(() => document.documentElement.classList.remove('e-abertura-ativa'), 2100);
+    };
+
+    if (document.readyState === 'complete') {
+      window.setTimeout(abrir, 350);
+    } else {
+      window.addEventListener('load', () => window.setTimeout(abrir, 350), { once: true });
+      /* teto de segurança: não prende a tela escura em rede lenta */
+      window.setTimeout(abrir, 4000);
+    }
+  })();
+
+  /* ----------------------- abas e pontos do hero -------------------------- */
+  const abas = Array.from(document.querySelectorAll<HTMLButtonElement>('.e-aba'));
+  const midias = Array.from(document.querySelectorAll<HTMLElement>('[data-midia]'));
+  abas.forEach((aba) => {
+    aba.addEventListener('click', () => {
+      const valor = aba.dataset.valor;
+      abas.forEach((outra) => {
+        const ativa = outra === aba;
+        outra.classList.toggle('is-ativa', ativa);
+        outra.setAttribute('aria-pressed', String(ativa));
+      });
+      midias.forEach((midia) => midia.classList.toggle('is-ativa', midia.dataset.midia === valor));
+    });
+  });
+
+  const pontos = Array.from(document.querySelectorAll<HTMLElement>('.hotspot'));
+  const fechaPontos = () => {
+    pontos.forEach((ponto) => {
+      ponto.classList.remove('is-active');
+      ponto.setAttribute('aria-expanded', 'false');
+    });
+  };
+  pontos.forEach((ponto) => {
+    const alterna = () => {
+      const ativo = ponto.classList.contains('is-active');
+      fechaPontos();
+      if (!ativo) {
+        ponto.classList.add('is-active');
+        ponto.setAttribute('aria-expanded', 'true');
+      }
+    };
+    ponto.addEventListener('click', (evento) => {
+      evento.stopPropagation();
+      alterna();
+    });
+    ponto.addEventListener('keydown', (evento) => {
+      if (evento.key === 'Enter' || evento.key === ' ') {
+        evento.preventDefault();
+        alterna();
+      }
+      if (evento.key === 'Escape') fechaPontos();
+    });
+  });
+  /* fecha o card aberto ao clicar em qualquer outro lugar da página */
+  document.addEventListener('click', fechaPontos);
 
   /* ------------------------------- revelações ------------------------------ */
   const alvos = document.querySelectorAll<HTMLElement>('[data-entrada], [data-texto], [data-foto]');
@@ -36,6 +119,50 @@
       { rootMargin: '0px', threshold: 0 },
     );
     alvos.forEach((el) => observador.observe(el));
+  }
+
+  /* ------------------------------ contagem -------------------------------- */
+  /* Números da faixa de dados: sobem de 0 ao valor real quando entram na
+     tela. O gatilho é checado a cada frame do passo() (nada de observer, que
+     pode ser perdido em rolagem muito rápida). Sem JS ou com movimento
+     reduzido o valor final já está no HTML. */
+  const contas = Array.from(document.querySelectorAll<HTMLElement>('[data-conta]'));
+  const contasPendentes = new Set<HTMLElement>(contas);
+  if (contas.length && !semMovimento) {
+    contas.forEach((el) => {
+      el.textContent = String(0).padStart(Number(el.dataset.contaPad ?? 0), '0');
+    });
+  }
+
+  function contar(el: HTMLElement) {
+    contasPendentes.delete(el);
+    const alvo = Number(el.dataset.conta ?? 0);
+    const pad = Number(el.dataset.contaPad ?? 0);
+    const mostrar = (v: number) => {
+      el.textContent = String(v).padStart(pad, '0');
+    };
+    if (semMovimento) {
+      mostrar(alvo);
+      return;
+    }
+    const inicio = performance.now();
+    const duracao = 1500;
+    const avancar = (agora: number) => {
+      const k = Math.min(1, (agora - inicio) / duracao);
+      const suave = 1 - Math.pow(1 - k, 3);
+      mostrar(Math.round(alvo * suave));
+      if (k < 1) requestAnimationFrame(avancar);
+    };
+    requestAnimationFrame(avancar);
+  }
+
+  function checarContas() {
+    if (!contasPendentes.size) return;
+    const vh = window.innerHeight;
+    for (const el of contasPendentes) {
+      const r = el.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) contar(el);
+    }
   }
 
   /* --------------------------- faixa horizontal ---------------------------- */
@@ -70,26 +197,67 @@
     });
   }
 
-  function contar() {
-    if (!contador) return;
+  /* Progresso total do scroll (0→1): com ele andam o contador 00–100 e o
+     anel do selo — uma volta inteira do topo ao fim da página. */
+  /* Progresso do hero fixado (0→1): publica em --p-heroi e o CSS faz o scrub
+     (título que sobe, botão que sobe e cresce, parallax da foto). */
+  function scrubHeroi() {
+    if (!heroi || !telaHeroi) return;
+    const percurso = heroi.offsetHeight - window.innerHeight;
+    const p = percurso > 0 ? preso(-heroi.getBoundingClientRect().top / percurso) : 0;
+    const valor = p.toFixed(4);
+    if (telaHeroi.style.getPropertyValue('--p-heroi') !== valor) {
+      telaHeroi.style.setProperty('--p-heroi', valor);
+    }
+  }
+
+  /* Progresso de cada seção fixada (0→1): publica em --p-pin e move os
+     elementos [data-scrub] no eixo Y pelo percurso do pin (fotos da seção
+     Conceito). Com movimento reduzido os elementos ficam na posição base. */
+  function scrubPinos() {
+    if (semMovimento) return;
+    for (const pino of pinos) {
+      const percurso = pino.offsetHeight - window.innerHeight;
+      if (percurso <= 0) continue;
+      const p = preso(-pino.getBoundingClientRect().top / percurso);
+      pino.style.setProperty('--p-pin', p.toFixed(4));
+      pino.querySelectorAll<HTMLElement>('[data-scrub]').forEach((el) => {
+        const forca = Number(el.dataset.scrub ?? 0);
+        el.style.transform = `translate3d(0, ${((p - 0.5) * forca).toFixed(1)}px, 0)`;
+      });
+    }
+  }
+
+  function progresso() {
     const total = document.documentElement.scrollHeight - window.innerHeight;
     const p = total > 0 ? preso(window.scrollY / total) : 0;
-    const texto = String(Math.round(p * 100)).padStart(2, '0');
-    if (contador.textContent !== texto) contador.textContent = texto;
+
+    if (contador) {
+      const texto = String(Math.round(p * 100)).padStart(2, '0');
+      if (contador.textContent !== texto) contador.textContent = texto;
+    }
+    if (anel) {
+      const giro = `rotate(${(p * 360).toFixed(2)}deg)`;
+      if (anel.style.transform !== giro) anel.style.transform = giro;
+    }
   }
 
   function tema() {
-    if (!chrome) return;
+    if (!chrome && !cabeca) return;
     const amostra = 56;
     let claro = false;
+    let cabecaClara = false;
     for (const secao of tematicos) {
       const r = secao.getBoundingClientRect();
       if (r.top <= amostra && r.bottom > amostra) {
         claro = secao.dataset.tema === 'claro';
+        /* No arco o fundo é claro mesmo com texto branco: o menu precisa de tinta. */
+        cabecaClara = secao.dataset.cabeca ? secao.dataset.cabeca === 'claro' : claro;
         break;
       }
     }
-    chrome.classList.toggle('e-chrome--claro', claro);
+    chrome?.classList.toggle('e-chrome--claro', claro);
+    cabeca?.classList.toggle('e-cabeca--clara', cabecaClara);
   }
 
   function passo() {
@@ -101,8 +269,9 @@
       aplicar();
       if (atual !== destino) agendar();
     }
-    // Parallax das linhas só com o trilho horizontal ativo (no celular os
-    // deslocamentos fixariam as linhas em −metade do alcance e estourariam).
+    // No desktop o trilho horizontal é quem move as linhas. No celular cada
+    // slide é uma tela vertical: a mesma deriva acontece enquanto o slide
+    // atravessa a viewport, com amplitude menor para não vazar da coluna.
     if (mq.matches) {
       const dist = Math.max(1, (altura || 1) - window.innerWidth);
       const p = preso(-atual / dist);
@@ -110,10 +279,23 @@
         const f = Number(linha.dataset.linha ?? 0);
         if (f) linha.style.transform = `translate3d(${((p - 0.5) * f).toFixed(1)}px, 0, 0)`;
       });
+    } else if (!semMovimento) {
+      const vh = window.innerHeight;
+      linhas.forEach((linha) => {
+        const f = Number(linha.dataset.linha ?? 0);
+        if (!f) return;
+        const ancora = linha.closest('.e-slide') ?? linha;
+        const r = ancora.getBoundingClientRect();
+        const p = preso((vh - r.top) / (vh + r.height));
+        linha.style.transform = `translate3d(${((p - 0.5) * f * 0.28).toFixed(1)}px, 0, 0)`;
+      });
     }
     parallax();
-    contar();
+    progresso();
     tema();
+    scrubHeroi();
+    scrubPinos();
+    checarContas();
   }
 
   function agendar() {

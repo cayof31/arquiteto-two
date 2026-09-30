@@ -1,17 +1,38 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import ObraCard from '../../components/projetos/ObraCard.astro';
-import { site } from '../../config/site';
+import '../../styles/era.css';
+import Foto from '../../components/midia/Foto.astro';
+import Moldura from '../../components/era/Moldura.astro';
+import Selo from '../../components/era/Selo.astro';
+import Navegacao from '../../components/era/Navegacao.astro';
+import Motor from '../../components/era/Motor.astro';
+import { site, mensagemWhatsapp } from '../../config/site';
+import { linkWhatsapp } from '../../lib/whatsapp';
 import { fichaTrilha } from '../../lib/seo';
+
+/* Listão de projetos no espelho da página de apartments da referência:
+   título gigante + contagem, barra de filtros em cápsula, grade de cartões
+   com cantos chanfrados, ladrilho editorial e faixa de convite. */
 
 const obras = (await getCollection('projetos')).sort((a, b) => a.data.ordem - b.data.ordem);
 const urlSite = Astro.site?.href.replace(/\/$/, '') ?? '';
+
+/* Tipos vêm da frente do conteúdo: "Comercial / Interiores" conta nos dois. */
+const tipos = [
+  ...new Set(obras.flatMap((o) => o.data.categoria.split('/').map((t) => t.trim().toLowerCase()))),
+].sort();
+const anos = [...new Set(obras.map((o) => o.data.ano))].sort((a, b) => b - a);
+const total = String(obras.length).padStart(2, '0');
+const whatsapp = linkWhatsapp(mensagemWhatsapp);
+
+const maiusculo = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
 ---
 
 <Base
   titulo={`Projetos | ${site.nome}`}
-  descricao={`Portfólio de arquitetura do ${site.nome}: residências, hospitalidade e interiores.`}
+  descricao={`Portfólio de arquitetura do ${site.nome}: residências, comercial e interiores.`}
+  cabecalho="mobile"
   estruturados={[
     fichaTrilha([
       { nome: 'Início', url: urlSite },
@@ -19,20 +40,641 @@ const urlSite = Astro.site?.href.replace(/\/$/, '') ?? '';
     ]),
   ]}
 >
-  <section class="mx-auto max-w-6xl px-5 py-16 md:py-24">
-    <p class="rotulo text-terracota">Portfólio</p>
-    <h1 class="mt-3 font-titulo text-5xl md:text-6xl">Projetos</h1>
-    <p class="mt-5 max-w-prose text-cinza">
-      Uma seleção de obras que o ateliê usa como referência de materialidade, escala e convívio.
-    </p>
-    <ul class="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="pagina-era e-proj">
+    <header class="e-proj-topo">
+      <h1 class="e-t-1" data-entrada>Projetos</h1>
+      <span class="e-t-1 e-proj-conta" data-conta data-entrada style="--atraso:140ms">{total}</span>
+    </header>
+
+    <div class="e-proj-filtros" data-entrada style="--atraso:240ms" role="group" aria-label="Filtrar projetos">
+      <label class="e-proj-filtro">
+        <span class="e-l1 e-proj-rotulo">Tipo</span>
+        <span class="e-seletor">
+          <select data-tipo>
+            <option value="todos">Todos</option>
+            {tipos.map((t) => <option value={t}>{maiusculo(t)}</option>)}
+          </select>
+        </span>
+      </label>
+
+      <label class="e-proj-filtro">
+        <span class="e-l1 e-proj-rotulo">Ano</span>
+        <span class="e-seletor">
+          <select data-ano>
+            <option value="todos">Todos</option>
+            {anos.map((a) => <option value={String(a)}>{a}</option>)}
+          </select>
+        </span>
+      </label>
+
+      <label class="e-proj-filtro">
+        <span class="e-l1 e-proj-rotulo">Ordenar</span>
+        <span class="e-seletor">
+          <select data-ordem>
+            <option value="relevancia">Relevante</option>
+            <option value="menor">Menor área</option>
+            <option value="maior">Maior área</option>
+          </select>
+        </span>
+      </label>
+
+      <button type="button" class="e-l1 e-proj-limpar" data-limpar>Limpar</button>
+    </div>
+
+    <ul class="e-proj-grade" id="lista" data-grade tabindex="-1">
       {
-        obras.map((obra) => (
-          <li>
-            <ObraCard obra={obra} />
-          </li>
-        ))
+        obras.map((obra, i) => {
+          const { titulo, categoria, ano, local, area, capa, altCapa, ordem } = obra.data;
+          const tags = categoria
+            .split('/')
+            .map((t) => t.trim().toLowerCase())
+            .join('|');
+          const num = String(ordem).padStart(2, '0');
+          return (
+            <li
+              class="e-obra"
+              data-obra
+              data-tags={tags}
+              data-ano={ano}
+              data-area={area}
+              data-ordem={ordem}
+              data-entrada
+              style={`--atraso:${300 + i * 70}ms; order:${i + 1 + (i >= 2 ? 1 : 0)}`}
+            >
+              <a class="e-obra-link" href={`/projetos/${obra.id}`}>
+                <span class="e-obra-topo">
+                  <span class="e-l1 e-obra-cat">{categoria}</span>
+                  <span class="e-l1 e-obra-ano">{ano}</span>
+                </span>
+                <span class="e-obra-foto">
+                  <Foto
+                    src={capa}
+                    alt={altCapa}
+                    sizes="(min-width: 1024px) 30vw, (min-width: 768px) 46vw, 92vw"
+                  />
+                </span>
+                <span class="e-obra-dados">
+                  <span class="e-l1 e-obra-meta">№{num} · {local}</span>
+                  <span class="e-t-5 e-obra-titulo">{titulo}</span>
+                  <span class="e-l1 e-obra-area">{area} m²</span>
+                </span>
+              </a>
+            </li>
+          );
+        })
       }
+
+      <li class="e-tile" data-tile data-entrada style="--atraso:560ms">
+        <Foto
+          src="projetos/hideout-leaf/3.jpg"
+          alt="Estrutura em madeira e vidro entre árvores"
+          sizes="(min-width: 1024px) 30vw, (min-width: 768px) 46vw, 92vw"
+        />
+        <span class="e-tile-sombra" aria-hidden="true"></span>
+        <span class="e-tile-texto">
+          <span class="e-t-5">Projeto autoral</span>
+          <span class="e-p1">Cada obra nasce do terreno, da luz e de quem vai morar nela.</span>
+        </span>
+      </li>
     </ul>
-  </section>
+
+    <div class="e-proj-vazio" data-vazio hidden>
+      <p class="e-t-4">Nada encontrado</p>
+      <p class="e-p1">Nenhum projeto com esses filtros. Tente outras combinações.</p>
+    </div>
+
+    <section class="e-proj-convite" data-entrada>
+      <div class="e-proj-convite-texto">
+        <p class="e-p1 e-proj-convite-lid">
+          Uma conversa curta basta para entender seu terreno, seu programa e o seu jeito de viver.
+        </p>
+        <h2 class="e-t-4">Vamos conversar</h2>
+        <a class="e-proj-btn" href={whatsapp} target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+      <div class="e-proj-convite-foto">
+        <Foto
+          src="projetos/residencia-caraca/2.jpg"
+          alt="Sala com pátio e vegetação vista de dentro da residência"
+          sizes="(min-width: 768px) 45vw, 92vw"
+        />
+      </div>
+    </section>
+
+    <div class="e-chrome">
+      <Moldura />
+      <Selo />
+      <Navegacao interna />
+      <div class="e-proj-rail">
+        <span class="e-l1 e-proj-rail-rotulo">Escolha um projeto</span>
+        <a class="e-l1 e-proj-rail-casa" href="/">Início /</a>
+      </div>
+    </div>
+
+    <Motor />
+  </div>
 </Base>
+
+<script>
+  /* contagem do topo: 00 → total, salvo em reduced-motion */
+  const conta = document.querySelector<HTMLElement>('[data-conta]');
+  const cartoes = Array.from(document.querySelectorAll<HTMLLIElement>('[data-obra]'));
+  const reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let animando = true;
+
+  if (conta) {
+    const total = cartoes.length;
+    if (reduz) {
+      conta.textContent = String(total).padStart(2, '0');
+    } else {
+      const inicio = performance.now();
+      const dur = 850;
+      const passo = (agora: number) => {
+        if (!animando) return;
+        const p = Math.min(1, (agora - inicio) / dur);
+        const suave = 1 - Math.pow(1 - p, 3);
+        conta.textContent = String(Math.round(suave * total)).padStart(2, '0');
+        if (p < 1) requestAnimationFrame(passo);
+      };
+      conta.textContent = '00';
+      requestAnimationFrame(passo);
+    }
+  }
+
+  /* filtros + ordenação (dados já viram nos atributos de cada cartão) */
+  const grade = document.querySelector<HTMLElement>('[data-grade]');
+  const tipo = document.querySelector<HTMLSelectElement>('[data-tipo]');
+  const ano = document.querySelector<HTMLSelectElement>('[data-ano]');
+  const ordem = document.querySelector<HTMLSelectElement>('[data-ordem]');
+  const limpar = document.querySelector<HTMLButtonElement>('[data-limpar]');
+  const vazio = document.querySelector<HTMLElement>('[data-vazio]');
+  const tile = document.querySelector<HTMLLIElement>('[data-tile]');
+
+  if (grade && tipo && ano && ordem && limpar) {
+    const aplicar = () => {
+      animando = false;
+      const filtrados = cartoes.filter(
+        (c) =>
+          (tipo.value === 'todos' || (c.dataset.tags ?? '').split('|').includes(tipo.value)) &&
+          (ano.value === 'todos' || c.dataset.ano === ano.value),
+      );
+      if (ordem.value === 'menor') {
+        filtrados.sort((a, b) => Number(a.dataset.area) - Number(b.dataset.area));
+      } else if (ordem.value === 'maior') {
+        filtrados.sort((a, b) => Number(b.dataset.area) - Number(a.dataset.area));
+      } else {
+        filtrados.sort((a, b) => Number(a.dataset.ordem) - Number(b.dataset.ordem));
+      }
+
+      const visiveis = new Set(filtrados);
+      cartoes.forEach((c) => {
+        c.hidden = !visiveis.has(c);
+      });
+      /* o ladrilho editorial fica sempre na 3ª vaga da grade */
+      filtrados.forEach((c, i) => {
+        c.style.order = String(i + 1 + (i >= 2 ? 1 : 0));
+      });
+      if (tile) tile.hidden = filtrados.length === 0;
+      if (vazio) vazio.hidden = filtrados.length > 0;
+      if (conta) conta.textContent = String(filtrados.length).padStart(2, '0');
+    };
+
+    tipo.addEventListener('change', aplicar);
+    ano.addEventListener('change', aplicar);
+    ordem.addEventListener('change', aplicar);
+    limpar.addEventListener('click', () => {
+      tipo.value = 'todos';
+      ano.value = 'todos';
+      ordem.value = 'relevancia';
+      aplicar();
+    });
+  }
+
+  /* revelações no scroll, mesmo motor visual da home */
+  const alvos = document.querySelectorAll<HTMLElement>('[data-entrada]');
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver((entradas) => {
+      entradas.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visivel');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -6% 0px' });
+    alvos.forEach((t) => obs.observe(t));
+  } else {
+    alvos.forEach((t) => t.classList.add('visivel'));
+  }
+</script>
+
+<style>
+  /* papel quente da referência; cartões em branco por cima */
+  .e-proj {
+    position: relative;
+    background: color-mix(in srgb, var(--color-papel) 72%, var(--color-linha));
+    padding:
+      0 calc(var(--cel) * 0.3) calc(var(--cel) * 1.2) calc(var(--cel) * 1.3);
+  }
+
+  /* ------------------------------- título --------------------------------- */
+
+  .e-proj-topo {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--u-32);
+    padding-top: calc(var(--cel) * 1.7);
+  }
+
+  /* ------------------------------ filtros --------------------------------- */
+
+  .e-proj-filtros {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--u-32);
+    min-height: calc(var(--cel) * 0.52);
+    margin-top: calc(var(--cel) * 0.18);
+    padding: 8px calc(var(--cel) * 0.4);
+    border: 1px solid var(--color-linha);
+    border-radius: 999px;
+  }
+
+  .e-proj-filtro {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .e-proj-rotulo {
+    color: var(--color-cinza);
+    font-weight: 500;
+  }
+
+  .e-seletor select {
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+    padding: 4px 22px 4px 0;
+    border: 0;
+    background: transparent
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%232c2416' stroke-width='1.4'/%3E%3C/svg%3E")
+      no-repeat right center;
+    background-size: 10px 6px;
+    font-family: var(--corpo);
+    font-size: var(--l1);
+    font-weight: 700;
+    font-stretch: 112%;
+    line-height: 1.45;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-tinta);
+    cursor: pointer;
+  }
+
+  .e-seletor select:focus-visible {
+    outline: 2px solid var(--color-terracota);
+    outline-offset: 3px;
+  }
+
+  /* O popup é do sistema: variável CSS e raio quase não entram.
+     Cor literal garante o papel/tinta mesmo fora da página. */
+  .e-seletor select option {
+    background-color: #ffffff;
+    color: #2c2416;
+    font-family: 'Archivo Variable', system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    font-stretch: 106%;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+  }
+
+  .e-seletor select option:checked,
+  .e-seletor select option:hover {
+    background-color: #2c2416;
+    color: #ffffff;
+  }
+
+  .e-proj-limpar {
+    border: 0;
+    background: none;
+    padding: 8px 4px;
+    color: var(--color-cinza);
+    cursor: pointer;
+    transition: color 0.3s var(--curva);
+  }
+
+  .e-proj-limpar:hover {
+    color: var(--color-tinta);
+  }
+
+  /* ------------------------------- grade ---------------------------------- */
+
+  .e-proj-grade {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap);
+    margin-top: calc(var(--cel) * 0.4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .e-obra {
+    display: flex;
+    min-width: 0;
+  }
+
+  .e-obra[hidden] {
+    display: none;
+  }
+
+  .e-obra-link {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--u-32);
+    padding: calc(var(--cel) * 0.24);
+    background: var(--color-papel);
+    color: inherit;
+    text-decoration: none;
+    /* cantos chanfrados, como os cartões da referência */
+    clip-path: polygon(
+      calc(var(--cel) * 0.1) 0,
+      calc(100% - var(--cel) * 0.1) 0,
+      100% calc(var(--cel) * 0.1),
+      100% calc(100% - var(--cel) * 0.1),
+      calc(100% - var(--cel) * 0.1) 100%,
+      calc(var(--cel) * 0.1) 100%,
+      0 calc(100% - var(--cel) * 0.1),
+      0 calc(var(--cel) * 0.1)
+    );
+  }
+
+  /* topo centrado como na referência: tipo em cima, ano embaixo —
+     deixa o canto superior direito livre para o nav fixo. */
+  .e-obra-topo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    text-align: center;
+  }
+
+  .e-obra-ano {
+    color: var(--color-cinza);
+    font-weight: 500;
+  }
+
+  .e-obra-foto {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  .e-obra-foto :global(img) {
+    transition: transform 0.6s var(--curva);
+  }
+
+  .e-obra-link:hover .e-obra-foto :global(img) {
+    transform: scale(1.03);
+  }
+
+  .e-obra-dados {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--cel) * 0.06);
+    margin-top: auto;
+    text-align: center;
+  }
+
+  .e-obra-titulo {
+    text-wrap: balance;
+    transition: color 0.35s var(--curva);
+  }
+
+  .e-obra-link:hover .e-obra-titulo {
+    color: var(--color-terracota);
+  }
+
+  /* ---------------------------- ladrilho editorial ------------------------ */
+
+  .e-tile {
+    position: relative;
+    order: 3;
+    min-width: 0;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--color-tinta);
+    clip-path: polygon(
+      calc(var(--cel) * 0.1) 0,
+      calc(100% - var(--cel) * 0.1) 0,
+      100% calc(var(--cel) * 0.1),
+      100% calc(100% - var(--cel) * 0.1),
+      calc(100% - var(--cel) * 0.1) 100%,
+      calc(var(--cel) * 0.1) 100%,
+      0 calc(100% - var(--cel) * 0.1),
+      0 calc(var(--cel) * 0.1)
+    );
+  }
+
+  .e-tile[hidden] {
+    display: none;
+  }
+
+  .e-tile :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .e-tile-sombra {
+    position: absolute;
+    inset: auto 0 0;
+    height: 58%;
+    background: linear-gradient(to top, rgb(18 12 8 / 0.82), rgb(18 12 8 / 0));
+  }
+
+  .e-tile-texto {
+    position: absolute;
+    inset: auto 0 0;
+    display: grid;
+    gap: var(--u-16);
+    padding: calc(var(--cel) * 0.24);
+    color: var(--color-papel);
+    text-align: left;
+  }
+
+  .e-tile-texto .e-p1 {
+    color: rgb(255 255 255 / 0.88);
+  }
+
+  /* ----------------------------- vazio ------------------------------------ */
+
+  .e-proj-vazio {
+    display: grid;
+    justify-items: center;
+    gap: var(--u-16);
+    padding: calc(var(--cel) * 2) var(--u-32);
+    text-align: center;
+  }
+
+  .e-proj-vazio[hidden] {
+    display: none;
+  }
+
+  .e-proj-vazio .e-p1 {
+    color: var(--color-cinza);
+  }
+
+  /* ----------------------------- convite ---------------------------------- */
+
+  .e-proj-convite {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: calc(var(--cel) * 0.55);
+    align-items: center;
+    margin-top: calc(var(--cel) * 1.2);
+    padding-top: calc(var(--cel) * 0.9);
+    border-top: 1px solid var(--color-linha);
+  }
+
+  .e-proj-convite-texto {
+    display: grid;
+    justify-items: start;
+    gap: var(--u-32);
+  }
+
+  .e-proj-convite-lid {
+    max-width: 46ch;
+    color: var(--color-cinza);
+  }
+
+  .e-proj-convite-foto {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    clip-path: polygon(
+      calc(var(--cel) * 0.1) 0,
+      calc(100% - var(--cel) * 0.1) 0,
+      100% calc(var(--cel) * 0.1),
+      100% calc(100% - var(--cel) * 0.1),
+      calc(100% - var(--cel) * 0.1) 100%,
+      calc(var(--cel) * 0.1) 100%,
+      0 calc(100% - var(--cel) * 0.1),
+      0 calc(var(--cel) * 0.1)
+    );
+  }
+
+  .e-proj-btn {
+    display: inline-block;
+    padding: 14px 32px;
+    border: 1px solid var(--color-tinta);
+    border-radius: 999px;
+    background: var(--color-tinta);
+    color: var(--color-papel);
+    font-family: var(--corpo);
+    font-size: var(--l1);
+    font-weight: 700;
+    font-stretch: 112%;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+      background-color 0.35s var(--curva),
+      border-color 0.35s var(--curva);
+  }
+
+  .e-proj-btn:hover {
+    background: var(--color-terracota);
+    border-color: var(--color-terracota);
+  }
+
+  /* ------------------------------ rail ------------------------------------ */
+
+  /* halo da cor do papel: o nav fixo flutua por cima de fotos escuras
+     (mesma leitura da referência, onde o nav pousa sobre o ladrilho). */
+  :global(.e-proj .e-nav) {
+    text-shadow:
+      0 1px 2px var(--color-papel),
+      0 0 14px var(--color-papel);
+  }
+
+  .e-proj-rail {
+    position: absolute;
+    left: clamp(1rem, 3vw, 2.5rem);
+    bottom: clamp(1rem, 3vw, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(var(--cel) * 0.3);
+    width: clamp(74px, 8vw, 108px);
+  }
+
+  .e-proj-rail-rotulo {
+    writing-mode: vertical-rl;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .e-proj-rail-casa {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s var(--curva);
+  }
+
+  .e-proj-rail-casa:hover {
+    color: var(--color-terracota);
+  }
+
+  /* ----------------------------- responsivo -------------------------------- */
+
+  @media (max-width: 1023px) {
+    .e-proj-grade {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 767px) {
+    .e-proj {
+      padding-inline: calc(var(--cel) * 0.42);
+    }
+
+    .e-proj-topo {
+      padding-top: calc(var(--cel) * 1.1);
+    }
+
+    .e-proj-topo > * {
+      font-size: clamp(46px, 13vw, var(--h1));
+    }
+
+    .e-proj-filtros {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 12px 20px;
+      border-radius: 24px;
+      padding: 16px 20px;
+    }
+
+    .e-proj-limpar {
+      margin-left: auto;
+    }
+
+    .e-proj-grade {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .e-tile {
+      aspect-ratio: 4 / 3;
+    }
+
+    .e-proj-convite {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

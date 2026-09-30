@@ -4,17 +4,31 @@ import { linkWhatsapp } from '../../lib/whatsapp';
 
 /* Navegação fixa no canto superior direito: chamada em serifa display com
    sublinhado + links miúdos, como na referência. */
+interface Props {
+  /**
+   * Página interna (ex.: projetos): a chamada vira o CTA da própria seção
+   * (âncora do listão) e o contato sai da âncora local para a home.
+   */
+  interna?: boolean;
+}
+
+const { interna = false } = Astro.props;
 const whatsapp = linkWhatsapp(mensagemWhatsapp);
+
+const principal = interna
+  ? { href: '#lista', html: 'Escolha um<br />projeto' }
+  : { href: '/projetos', html: 'Ver os<br />projetos' };
+const contato = interna ? '/#contato' : '#contato';
 ---
 
 <nav class="e-nav" aria-label="Navegação principal">
-  <a class="e-nav-principal" href="/projetos">Ver os<br />projetos</a>
+  <a class="e-nav-principal" href={principal.href} set:html={principal.html}></a>
   <ul class="e-nav-lista">
     <li>
       <a class="e-l1" href={whatsapp} target="_blank" rel="noopener">WhatsApp</a>
     </li>
     <li>
-      <a class="e-l1" href="#contato">Contato</a>
+      <a class="e-l1" href={contato}>Contato</a>
     </li>
     <li>
       <a class="e-l1" href={site.instagramUrl} target="_blank" rel="noopener noreferrer">

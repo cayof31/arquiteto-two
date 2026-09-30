@@ -1,41 +1,515 @@
 ---
 import Foto from '../midia/Foto.astro';
 import Dividido from './Dividido.astro';
+import Abertura from './Abertura.astro';
+import BotaoCircular from './BotaoCircular.astro';
 
-/* Abertura em tela cheia: foto de fundo, título gigante em duas linhas com o
-   acento manuscrito sobreposto e a faixa de três partes embaixo. */
+/* Hero da sequência de abertura: seção alta com a tela fixada (sticky) e o
+   progresso do scroll publicado em --p-heroi pelo Motor — todo o scrub
+   (título que sobe, botão que cresce) acontece em CSS. A classe .e-abre na
+   tela mantém a porta fechada; o Motor a remove para abrir o arco. */
 ---
 
-<section id="inicio" class="e-secao e-hero" data-tema="claro">
-  <div class="e-fundo" aria-hidden="true">
-    <div class="e-paralelo" data-paralelo="70">
-      <Foto
-        src="projetos/dr-house/capa.jpg"
-        alt=""
-        sizes="100vw"
-        prioridade
-      />
+<section id="inicio" class="e-secao e-hero" data-tema="claro" data-heroi>
+  <div class="e-hero-tela e-abre">
+    <!-- Recorte da porta: o clip-path abre o arco da foto sobre o fundo escuro -->
+    <div class="e-hero-recorte" aria-hidden="true">
+      <div class="e-fundo">
+        <div class="e-paralelo">
+          <div class="e-hero-img is-ativa" data-midia="residencial">
+            <Foto
+              src="projetos/hero/1.jpg"
+              alt="Casa de dois pavimentos aberta para o jardim"
+              sizes="100vw"
+              prioridade
+            />
+          </div>
+          <div class="e-hero-img" data-midia="comercial">
+            <Foto
+              src="projetos/hero/2.jpg"
+              alt="Villa entre a vegetação, aberta para a paisagem"
+              sizes="100vw"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="e-veu"></div>
     </div>
-  </div>
-  <div class="e-veu" aria-hidden="true"></div>
 
-  <div class="e-hero-conteudo">
-    <h1 class="e-t-1 e-hero-titulo">
-      <span class="e-linha"><Dividido texto="Suzana" /></span>
-      <span class="e-linha"><Dividido texto="Loroff" atraso={160} /></span>
-      <span class="e-a1 e-hero-acento">
-        <span data-entrada style="--atraso:560ms">Studio</span>
-      </span>
-    </h1>
+    <!-- CONTEÚDO (título, linha e abas) -->
+    <div class="e-hero-conteudo">
+      <div class="e-hero-topo">
+        <h1 class="e-t-1 e-hero-titulo">
+          <span class="e-linha"><Dividido texto="Suzana" /></span>
+          <span class="e-linha"><Dividido texto="Loroff" atraso={160} /></span>
+          <span class="e-a1 e-hero-acento">
+            <span data-entrada style="--atraso:560ms">Studio</span>
+          </span>
+        </h1>
 
-    <div class="e-hero-linha" data-entrada style="--atraso:700ms">
-      <span class="e-t-5">Arquitetura</span>
-      <span class="e-l2">
-        <span>Residencial</span>
-        <i class="e-fio-h"></i>
-        <span>Hospitalidade</span>
-      </span>
-      <span class="e-t-5">São Paulo</span>
+        <div class="e-hero-linha" data-entrada style="--atraso:700ms">
+          <span class="e-t-5">Arquitetura</span>
+          <i class="e-fio-h"></i>
+          <span class="e-t-5">São Paulo</span>
+        </div>
+      </div>
+
+      <!-- Abas: trocam a foto em destaque (mesmo mecanismo das abas da referência) -->
+      <div
+        class="e-hero-abas"
+        role="group"
+        aria-label="Tipo de obra em destaque"
+        data-entrada
+        style="--atraso:880ms"
+      >
+        <button type="button" class="e-aba is-ativa" data-valor="residencial" aria-pressed="true">
+          Residencial
+        </button>
+        <button type="button" class="e-aba" data-valor="comercial" aria-pressed="false">
+          comercial
+        </button>
+      </div>
     </div>
+
+    <!-- PONTOS INTERATIVOS (Hotspots) SOBRE A IMAGEM -->
+    <div class="hotspots-container">
+      <div
+        class="hotspot hotspot--a"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+        aria-label="Ver detalhe da fachada principal"
+      >
+        <span class="hotspot-pulse"></span>
+        <span class="hotspot-dot"></span>
+        <div class="hotspot-card">
+          <h4>Fachada Principal</h4>
+          <p>Revestimento em pedra natural e caixilharia minimalista.</p>
+        </div>
+      </div>
+
+      <div
+        class="hotspot hotspot--b"
+        role="button"
+        tabindex="0"
+        aria-expanded="false"
+        aria-label="Ver detalhe da integração externa"
+      >
+        <span class="hotspot-pulse"></span>
+        <span class="hotspot-dot"></span>
+        <div class="hotspot-card">
+          <h4>Integração Externa</h4>
+          <p>Conexão fluida entre living e área de contemplação.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botão redondo que sobe e cresce com o scroll (como o da referência) -->
+    <div class="e-hero-botao">
+      <BotaoCircular href="/projetos" rotulo="Ver projetos" />
+    </div>
+
+    <Abertura />
   </div>
 </section>
+
+<style>
+  .e-hero {
+    position: relative;
+    display: block;
+    height: 400vh;
+  }
+
+  .e-hero-tela {
+    position: sticky;
+    top: -100vh;
+    /* height: 100vh; */
+    height: 200vh;
+    overflow: clip;
+    /* tela da abertura: escuro ao redor da porta */
+    background: var(--color-tinta);
+    color: var(--color-papel);
+  }
+
+  /* --------------------------- porta (clip-path) -------------------------- */
+
+  .e-abre .e-hero-recorte {
+    clip-path: inset(50% 50% 50% 50% round 50% 50% 0 0);
+  }
+
+  .e-hero-recorte {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* abertura: do ponto central para o arco em pé e depois para a tela toda */
+  .e-hero-tela:not(.e-abre) .e-hero-recorte {
+    animation: e-abre-arco 1.7s var(--curva) both;
+  }
+
+  @keyframes e-abre-arco {
+    from {
+      clip-path: inset(50% 50% 50% 50% round 50% 50% 0 0);
+    }
+    45% {
+      clip-path: inset(30% 38% 0 38% round 50% 50% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0 round 0 0 0 0);
+    }
+  }
+
+  /* --------------------------------- mídia -------------------------------- */
+
+  .e-paralelo {
+    /* desloca e aproxica conforme o scrub do hero */
+    transform: translate3d(0, calc(var(--p-heroi, 0) * -4.5%), 0)
+      scale(calc(1 + var(--p-heroi, 0) * 0.15));
+  }
+  .e-hero-img {
+    /* desloca e aproxica conforme o scrub do hero */
+    transform: scale(calc(1 + var(--p-heroi, 0) * 0.2));
+  }
+  .e-hero-img {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.9s var(--curva);
+  }
+
+  .e-hero-img.is-ativa {
+    opacity: 1;
+  }
+
+  /* --------------------------------- texto -------------------------------- */
+
+  .e-hero-conteudo {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--cel) * 0.15) var(--u-48) calc(var(--cel) * 1.3);
+    text-align: center;
+    pointer-events: none;
+    /* sobe com o scroll, como na referência */
+    transform: translate3d(0, calc(var(--p-heroi, 0) * -46vh), 0);
+    /* entra só quando a porta abre */
+    opacity: 0;
+    transition: opacity 1s var(--curva) 0.45s;
+  }
+
+  .e-hero-tela:not(.e-abre) .e-hero-conteudo {
+    opacity: 1;
+  }
+
+  .e-hero-linha {
+    /* o global usa 0.62cel; aqui o bloco precisa caber num só viewport */
+    margin-top: calc(var(--cel) * 0.4);
+  }
+
+  .e-hero-topo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    /* título e linha saem de cena no primeiro trecho do scroll */
+    opacity: clamp(0, calc(1 - var(--p-heroi, 0) * 1.7), 1);
+  }
+
+  .e-hero-abas {
+    display: flex;
+    align-items: center;
+    gap: var(--u-32);
+    margin-top: calc(var(--cel) * 0.5);
+    pointer-events: auto;
+  }
+
+  .e-aba {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 6px 2px;
+    cursor: pointer;
+    font-family: var(--corpo);
+    font-size: var(--l1);
+    font-weight: 700;
+    font-stretch: 112%;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-papel) 55%, transparent);
+    border-bottom: 1px solid transparent;
+    transition:
+      color 0.35s var(--curva),
+      border-color 0.35s var(--curva);
+  }
+
+  .e-aba.is-ativa {
+    color: var(--color-papel);
+    border-bottom-color: var(--color-papel);
+  }
+
+  .e-aba:hover {
+    color: var(--color-papel);
+  }
+
+  /* durante a abertura nada responde ao ponteiro */
+  .e-abre .e-hero-abas,
+  .e-abre .e-hero-botao,
+  .e-abre .hotspots-container {
+    pointer-events: none;
+  }
+
+  /* ------------------------- botão redondo (cresce) ----------------------- */
+
+  .e-hero-botao {
+    position: absolute;
+    left: 50%;
+    bottom: calc(var(--cel) * 0.55);
+    z-index: 4;
+    color: var(--color-papel);
+    transform: translate(-50%, calc((1 - var(--p-heroi, 0)) * 15vh))
+      scale(calc(1 + var(--p-heroi, 0) * 0.3));
+    transform-origin: 50% 100%;
+    visibility: hidden;
+    opacity: clamp(0, calc((var(--p-heroi, 0) - 0.07) * 7), 1);
+  }
+
+  .e-hero-tela:not(.e-abre) .e-hero-botao {
+    visibility: visible;
+  }
+
+  /* no fundo da foto o preenchimento do hover inverte */
+  .e-hero-botao :global(.e-botao-c):hover span {
+    color: var(--color-tinta);
+  }
+
+  /* ------------------------ pontos (hotspots) ----------------------------- */
+
+  .hotspots-container {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s var(--curva) 0.6s;
+  }
+
+  .e-hero-tela:not(.e-abre) .hotspots-container {
+    opacity: 1;
+  }
+
+  .hotspot {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  /* pontos nas laterais, fora da área do título/linha/abas */
+  .hotspot--a {
+    top: 30%;
+    left: 15%;
+  }
+
+  .hotspot--b {
+    top: 68%;
+    left: 80%;
+  }
+
+  .hotspot-dot {
+    width: 14px;
+    height: 14px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: block;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+  }
+
+  /* Efeito de radar pulsando em volta do ponto */
+  .hotspot-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: translate(-50%, -50%) scale(0.8);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1.8);
+      opacity: 0;
+    }
+  }
+
+  .hotspot:hover .hotspot-dot {
+    transform: scale(1.3);
+    background-color: #d4af37; /* Tom dourado ou cor de destaque */
+  }
+
+  /* O Card que aparece ao clicar/passar o mouse */
+  .hotspot-card {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: 220px;
+    background: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 15px;
+    color: #fff;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    text-align: left;
+  }
+
+  /* Mostra o card quando ativado (classe is-active via JS ou hover puro) */
+  .hotspot.is-active .hotspot-card,
+  .hotspot:hover .hotspot-card,
+  .hotspot:focus-visible .hotspot-card {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .hotspot-card h4 {
+    margin: 0 0 5px 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .hotspot-card p {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #ccc;
+    line-height: 1.4;
+  }
+
+  /* --------------------------------- mobile ------------------------------- */
+
+  @media (max-width: 767px) {
+    /* Mesmo pin do desktop: a imagem tem 200vh e gruda em -100vh, então
+       a janela mostra só a metade. Os motivos sobem essa última tela. */
+    .e-hero-conteudo {
+      height: 100vh;
+      padding-top: 5.25rem;
+      padding-bottom: calc(var(--cel) * 2.4);
+    }
+
+    .e-hero-linha {
+      width: 100%;
+    }
+
+    .e-hero-abas {
+      gap: var(--u-16);
+    }
+
+    .e-hero-botao {
+      bottom: calc(var(--cel) * 0.9);
+      transform: translate(-50%, calc((1 - var(--p-heroi, 0)) * 9vh))
+        scale(calc(1 + var(--p-heroi, 0) * 0.24));
+    }
+
+    .hotspot--a {
+      top: 22%;
+      left: 16%;
+    }
+
+    .hotspot--b {
+      top: 46%;
+      left: 84%;
+    }
+
+    .hotspot-card {
+      width: min(220px, calc(100vw - 2.5rem));
+    }
+
+    .hotspot--a .hotspot-card {
+      left: 0;
+      transform: translateX(0) translateY(10px);
+    }
+
+    .hotspot--b .hotspot-card {
+      left: auto;
+      right: 0;
+      transform: translateX(0) translateY(10px);
+    }
+
+    .hotspot--a.is-active .hotspot-card,
+    .hotspot--a:hover .hotspot-card,
+    .hotspot--a:focus-visible .hotspot-card,
+    .hotspot--b.is-active .hotspot-card,
+    .hotspot--b:hover .hotspot-card,
+    .hotspot--b:focus-visible .hotspot-card {
+      transform: translateX(0) translateY(0);
+    }
+  }
+
+  /* telas baixas: o bloco inteiro precisa caber num viewport só */
+  @media (min-width: 768px) and (max-height: 760px) {
+    .e-hero-conteudo {
+      padding-bottom: calc(var(--cel) * 0.8);
+    }
+
+    .e-hero-linha {
+      margin-top: calc(var(--cel) * 0.25);
+    }
+
+    .e-hero-abas {
+      margin-top: calc(var(--cel) * 0.3);
+    }
+  }
+
+  /* -------------------------- movimento reduzido -------------------------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    .e-hero-recorte {
+      clip-path: none !important;
+      animation: none !important;
+    }
+
+    .e-hero-conteudo,
+    .hotspots-container {
+      opacity: 1 !important;
+    }
+
+    .e-hero-conteudo {
+      transform: none !important;
+    }
+
+    .e-hero-topo {
+      opacity: 1 !important;
+    }
+
+    .e-hero-botao {
+      visibility: visible !important;
+      transform: translateX(-50%) !important;
+      opacity: 1 !important;
+    }
+
+    .e-paralelo {
+      transform: none !important;
+    }
+
+    .hotspot-pulse {
+      animation: none !important;
+    }
+  }
+</style>

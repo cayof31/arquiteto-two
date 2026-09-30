@@ -15,6 +15,12 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'never',
   integrations: [sitemap()],
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+    server: {
+      // Túnel Quick Tunnel muda de host a cada `cloudflared`. O ponto libera o domínio e subdomínios.
+      allowedHosts: ['.trycloudflare.com'],
+    },
+  },
   image: { responsiveStyles: true },
 });

@@ -30,7 +30,9 @@ const pontos = obras.map((obra, i) => {
     <div class="e-h-faixa" data-faixa>
       <!-- 1 · estúdio ------------------------------------------------------->
       <article class="e-slide e-slide--info">
-        <Ornamento classe="e-orno e-flor e-flor--info" />
+        <Foto  classe="e-orno e-image e-image--info" src="projetos/hideout-leaf/1.jpg" alt={intro.alt} sizes="(min-width: 768px) 42vw, 90vw" />
+
+        <!-- <Ornamento classe="e-orno e-flor e-flor--info" /> -->
 
         <div class="e-info">
           <div class="e-info-topo" aria-hidden="true"></div>
@@ -68,8 +70,16 @@ const pontos = obras.map((obra, i) => {
 
       <!-- 2 · obras --------------------------------------------------------->
       <article class="e-slide e-slide--intro">
-        <Ornamento classe="e-orno e-flor e-flor--intro" />
-
+        <!-- <Ornamento classe="e-orno e-flor e-flor--intro" /> -->
+        <!-- <img class="e-orno e-flor e-flor--intro" src={} alt={intro.alt} sizes="(min-width: 768px) 42vw, 90vw" /> -->
+        <!-- <Foto  classe="e-orno e-image e-image--intro" src="projetos/dr-house/5.jpg" alt="Detalhe de luz sobre parede texturizada" sizes="(min-width: 768px) 42vw, 90vw" /> -->
+        <figure class="e-orno e-image e-image--intro" data-foto data-scrub="110">
+          <Foto
+            src="projetos/dr-house/4.jpg"
+            alt="Detalhe de luz sobre parede texturizada"
+            sizes="(max-width: 767px) 32vw, 15vw"
+          />
+        </figure>
         <div class="e-grade g13 e-intro">
           <p class="e-intro-cap e-c1" data-entrada>São Paulo</p>
 

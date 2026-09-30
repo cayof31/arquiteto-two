@@ -1,6 +1,7 @@
 ---
 import { site, mensagemWhatsapp } from '../../config/site';
 import { linkWhatsapp } from '../../lib/whatsapp';
+import Foto from '../midia/Foto.astro';
 import Dividido from './Dividido.astro';
 
 /* Encerramento escuro: chamada em serifa display + contatos. */
@@ -14,6 +15,11 @@ const dados = [
 ---
 
 <section id="contato" class="e-secao e-contato" data-tema="claro">
+  <!-- <div class="e-contato-foto"></div> -->
+   <!-- <div class="e-contato-foto">
+     <Foto  src="projetos/hero_branca_sem_fundo.png" alt="Foto do contato" sizes="100vw" isLocal={true} />
+   </div> -->
+
   <p class="e-l1" data-entrada>Contato</p>
 
   <div class="e-contato-titulo e-t-3">
@@ -40,6 +46,7 @@ const dados = [
   <div class="e-contato-links e-l1" data-entrada style="--atraso:640ms">
     <a href={whatsapp} target="_blank" rel="noopener">Chamar no WhatsApp</a>
     <a href={`tel:+${site.telefoneWhatsapp}`}>{site.telefoneExibicao}</a>
+    <a href={site.criadorUrl} target="_blank" rel="noopener">IbagTech</a>
   </div>
 
   <dl class="e-contato-dados" data-entrada style="--atraso:760ms">

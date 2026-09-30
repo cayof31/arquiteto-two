@@ -1,0 +1,104 @@
+---
+import { urlMidia } from '../../lib/midia';
+
+interface Props {
+  /** Chave em `src/assets/…`, caminho de `public/` (`/videos/x.mp4`) ou URL completa. */
+  src: string;
+  /** Imagem de capa, no mesmo formato de chave do `Foto` (Worker de imagens). */
+  poster?: string;
+  /** Rótulo de acessibilidade (aria-label). */
+  rotulo?: string;
+  classe?: string;
+  /** Mostra os controles nativos do player. */
+  controles?: boolean;
+  /** Autoplay — força mudo + playsinline, regra dos navegadores. */
+  autoplay?: boolean;
+  /** Repete ao terminar. */
+  loop?: boolean;
+  /** Mudo por padrão: áudio só toca se pedir (`mudo={false}`). */
+  mudo?: boolean;
+  /** Legenda `.vtt` (renderizada em pt-BR, ligada por padrão). */
+  legenda?: string;
+  /** `preload="auto"` — o padrão é `metadata`. */
+  prioridade?: boolean;
+}
+
+const videos = import.meta.glob<{ default: string }>(
+  '../../assets/**/*.{mp4,webm,ogv}',
+  { eager: true },
+);
+
+const imagens = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/**/*.{jpg,jpeg,png,webp}',
+  { eager: true },
+);
+
+const {
+  src,
+  poster,
+  rotulo,
+  classe = '',
+  controles = false,
+  autoplay = false,
+  loop = false,
+  mudo = true,
+  legenda,
+  prioridade = false,
+} = Astro.props;
+
+/* URL completa ou caminho de `public/` entram crus, sem lookup em assets. */
+const cru = /^(https?:)?\/\//.test(src) || src.startsWith('/');
+
+/* O Worker de imagens só aceita chaves de imagem (jpg/png/webp/avif — ver
+   `workers/midia/src/chaves.ts`), então vídeo nunca passa por
+   PUBLIC_IMAGE_BASE: ou é local, ou PUBLIC_VIDEO_BASE (R2 cru / outro host). */
+const baseVideo = import.meta.env.PUBLIC_VIDEO_BASE as string | undefined;
+const baseImagem = import.meta.env.PUBLIC_IMAGE_BASE as string | undefined;
+
+const localVideo = cru
+  ? undefined
+  : Object.entries(videos).find(([caminho]) =>
+      caminho.endsWith(`/assets/${src}`) || caminho.endsWith(`/${src}`),
+    )?.[1]?.default;
+
+const urlVideo = cru
+  ? src
+  : baseVideo
+    ? `${baseVideo.replace(/\/$/, '')}/${src}`
+    : localVideo;
+
+const urlPoster = !poster
+  ? undefined
+  : /^(https?:)?\/\//.test(poster) || poster.startsWith('/')
+    ? poster
+    : baseImagem
+      ? urlMidia(baseImagem, poster, 960)
+      : Object.entries(imagens).find(([caminho]) =>
+          caminho.endsWith(`/assets/${poster}`) || caminho.endsWith(`/${poster}`),
+        )?.[1]?.default?.src;
+
+const classeVideo = `h-full w-full ${classe || 'object-cover'}`;
+---
+
+{
+  urlVideo ? (
+    <video
+      src={urlVideo}
+      poster={urlPoster}
+      class={classeVideo}
+      controls={controles}
+      autoplay={autoplay}
+      muted={mudo || autoplay}
+      loop={loop}
+      playsinline
+      preload={prioridade ? 'auto' : 'metadata'}
+      aria-label={rotulo}
+    >
+      {legenda && (
+        <track kind="captions" src={legenda} srclang="pt-BR" label="Português" default />
+      )}
+    </video>
+  ) : (
+    <p class="text-sm text-cinza">Vídeo ausente: {src}</p>
+  )
+}
