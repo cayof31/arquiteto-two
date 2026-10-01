@@ -421,7 +421,8 @@
 }
 
 .e-paralelo {
-  position: relative;
+  position: absolute;
+  inset: -8% 0;
   will-change: transform;
 }
 
@@ -527,7 +528,7 @@
 /* -------------------------------- contato --------------------------------- */
 
 .e-contato {
-  background: #17402e;
+  background: #6c9cdb;
   /* background-image: url('/hero_escura_sem_fundo.png'); */
   /* background-image: url("/hero_branca_sem_fundo.png"); */
   position: relative;
