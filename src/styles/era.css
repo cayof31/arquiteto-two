@@ -421,8 +421,7 @@
 }
 
 .e-paralelo {
-  position: absolute;
-  inset: -8% 0;
+  position: relative;
   will-change: transform;
 }
 
@@ -1214,7 +1213,7 @@
     padding-block: 0;
     padding-right: 0;
     align-items: center;
-    
+
   }
 
   .e-info-topo {
