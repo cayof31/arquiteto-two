@@ -993,6 +993,12 @@
 .e-foto[data-foto] img {
   transform: scale(1.12);
 }
+.e-foto-percurso {
+  grid-column: 1 / 4;
+  aspect-ratio: 4 / 5;
+  grid-row: auto;
+  
+}
 
 .e-flor {
   position: absolute;
@@ -1038,8 +1044,8 @@
 
 .e-image--intro {
   bottom: calc(var(--cel) * 0);
-  left: calc(var(--cel) * -1.2);
-  width: calc(var(--cel) * 3.4);
+  left: calc(var(--cel) * -2.2);
+  width: calc(var(--cel) * 4.4);
   height: auto;
   z-index: -1;
 
@@ -1272,6 +1278,7 @@
     grid-row: auto;
     aspect-ratio: 3 / 4;
   }
+  
 
   .e-intro-desc {
     grid-column: 1 / -1;
