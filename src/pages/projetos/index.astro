@@ -43,7 +43,7 @@ const maiusculo = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
   <div class="pagina-era e-proj">
     <header class="e-proj-topo">
       <h1 class="e-t-1" data-entrada>Projetos</h1>
-      <span class="e-t-1 e-proj-conta" data-conta data-entrada style="--atraso:140ms">{total}</span>
+      <span class="e-t-1 e-proj-conta" data-proj-conta data-entrada style="--atraso:140ms">{total}</span>
     </header>
 
     <div class="e-proj-filtros" data-entrada style="--atraso:240ms" role="group" aria-label="Filtrar projetos">
@@ -176,7 +176,7 @@ const maiusculo = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
 
 <script>
   /* contagem do topo: 00 → total, salvo em reduced-motion */
-  const conta = document.querySelector<HTMLElement>('[data-conta]');
+  const conta = document.querySelector<HTMLElement>('[data-proj-conta]');
   const cartoes = Array.from(document.querySelectorAll<HTMLLIElement>('[data-obra]'));
   const reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let animando = true;
