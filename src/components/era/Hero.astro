@@ -405,8 +405,13 @@ import BotaoCircular from './BotaoCircular.astro';
   /* --------------------------------- mobile ------------------------------- */
 
   @media (max-width: 767px) {
-    /* Mesmo pin do desktop: a imagem tem 200vh e gruda em -100vh, então
-       a janela mostra só a metade. Os motivos sobem essa última tela. */
+    /* Pin curto no celular: a tela ainda gruda (200vh / top -100vh), mas o
+       percurso cai de 200vh para ~40vh — Motivos sobe logo e o scroll não
+       parece travado. Desktop permanece em 400vh. */
+    .e-hero {
+      height: 240vh;
+    }
+
     .e-hero-conteudo {
       height: 100vh;
       padding-top: 5.25rem;
@@ -422,7 +427,7 @@ import BotaoCircular from './BotaoCircular.astro';
     }
 
     .e-hero-botao {
-      bottom: calc(var(--cel) * 0.9);
+      bottom: calc(var(--cel) * 14.9);
       transform: translate(-50%, calc((1 - var(--p-heroi, 0)) * 9vh))
         scale(calc(1 + var(--p-heroi, 0) * 0.24));
     }

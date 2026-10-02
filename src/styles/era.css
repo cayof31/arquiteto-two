@@ -19,9 +19,9 @@
   --h1: calc(var(--cel) * 1.4118);
   --h3: calc(var(--cel) * 0.7059);
   --h4: calc(var(--cel) * 0.4632);
-  --h5: calc(var(--cel) * 0.2941);
+  --h5: calc(var(--cel) * 0.3941);
   --c1: max(13px, calc(var(--cel) * 0.1838));
-  --p1: max(12px, calc(var(--cel) * 0.0956));
+  --p1: max(12px, calc(var(--cel) * 0.1256));
   --l1: max(10px, calc(var(--cel) * 0.0809));
   --l2: max(9px, calc(var(--cel) * 0.0662));
   --a1: calc(var(--cel) * 1.4118);
@@ -1336,9 +1336,7 @@
   }
   .e-foto-percurso {
     top: -16%;
-    grid-column: -1 / 4;
     aspect-ratio: 1;
-    grid-row: auto;
   }
   .e-percurso-lista {
     position: static;
