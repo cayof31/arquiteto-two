@@ -1334,10 +1334,15 @@
   .e-percurso-flor {
     display: none;
   }
-
+  .e-foto-percurso {
+    top: -16%;
+    grid-column: -1 / 4;
+    aspect-ratio: 1;
+    grid-row: auto;
+  }
   .e-percurso-lista {
     position: static;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: flex-start;
     gap: var(--u-32);
