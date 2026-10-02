@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BUCKET="${R2_BUCKET:-studio-suzana-loroff}"
+BUCKET="${R2_BUCKET:-studio-Liz-loroff}"
 RAIZ="$(cd "$(dirname "$0")/.." && pwd)"
 ASSETS="$RAIZ/src/assets"
 

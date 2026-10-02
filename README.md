@@ -1,4 +1,4 @@
-# Studio Suzana Loroff
+# Studio Liz
 
 Modelo de site para arquiteto — home com retrato e escritório. Demo independente, feito em Astro.
 
@@ -7,7 +7,7 @@ pnpm install
 pnpm dev
 ```
 
-Persona, WhatsApp e e-mail ficam em `src/config/site.ts`. Retratos em `src/assets/suzana/`.
+Persona, WhatsApp e e-mail ficam em `src/config/site.ts`. Retratos em `src/assets/Liz/`.
 
 ## Imagens (Cloudflare Free + R2 + Worker)
 
@@ -23,7 +23,7 @@ pnpm midia:deploy
 Crie `.env` com a URL impressa no deploy:
 
 ```
-PUBLIC_IMAGE_BASE=https://studio-suzana-loroff-midia.<conta>.workers.dev
+PUBLIC_IMAGE_BASE=https://studio-Liz-loroff-midia.<conta>.workers.dev
 ```
 
 Com isso o `pnpm build` não reprocessa JPEG localmente.

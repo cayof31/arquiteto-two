@@ -4,7 +4,7 @@ export function fichaPessoa(urlSite: string) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    '@id': `${urlSite}/#suzana`,
+    '@id': `${urlSite}/#Liz`,
     name: site.arquiteta,
     jobTitle: site.cargo,
     url: urlSite,
@@ -38,7 +38,7 @@ export function fichaEscritorio(urlSite: string) {
       addressCountry: 'BR',
       streetAddress: site.endereco,
     },
-    founder: { '@id': `${urlSite}/#suzana` },
+    founder: { '@id': `${urlSite}/#Liz` },
     sameAs: [site.instagramUrl],
   };
 }

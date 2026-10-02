@@ -1,6 +1,6 @@
 export const site = {
-  arquiteta: 'Suzana Loroff',
-  nome: 'Studio Suzana Loroff',
+  arquiteta: 'Liz',
+  nome: 'Studio Liz',
   nomeCurto: 'Loroff',
   cargo: 'Arquiteta',
   descricaoCurta:
@@ -8,15 +8,15 @@ export const site = {
   manifesto:
     'Arquitetura que começa na conversa e termina no uso cotidiano.',
   bio: [
-    'Suzana Loroff fundou o studio depois de anos coordenando obras residenciais em São Paulo. O trabalho parte do diálogo com quem vai morar — o terreno, a rotina, a luz de cada estação — e só então vira desenho.',
+    'Liz fundou o studio depois de anos coordenando obras residenciais em São Paulo. O trabalho parte do diálogo com quem vai morar — o terreno, a rotina, a luz de cada estação — e só então vira desenho.',
     'O escritório é pequeno de propósito: poucos projetos ao mesmo tempo, acompanhamento próximo da obra e uma mesa onde maquete, planta e conversa ocupam o mesmo lugar.',
   ],
   filosofia:
     'Projetamos espaços que envelhecem bem. Preferimos poucos materiais bem resolvidos a um catálogo inteiro, e tratamos a obra como continuação do projeto — não como uma etapa à parte.',
   telefoneWhatsapp: '5511999999999',
   telefoneExibicao: '(11) 99999-9999',
-  email: 'contato@studiosuzanaloroff.exemplo',
-  instagram: '@studiosuzanaloroff',
+  email: 'contato@studioLizloroff.exemplo',
+  instagram: '@studioLizloroff',
   instagramUrl: 'https://www.instagram.com/',
   cidade: 'São Paulo',
   uf: 'SP',
@@ -43,4 +43,4 @@ export const site = {
 } as const;
 
 export const mensagemWhatsapp =
-  'Olá, Suzana. Vi o site do Studio Suzana Loroff e gostaria de conversar sobre um projeto.';
+  'Olá, Liz. Vi o site do Studio Liz e gostaria de conversar sobre um projeto.';
