@@ -997,7 +997,16 @@
   grid-column: 1 / 4;
   aspect-ratio: 4 / 5;
   grid-row: auto;
-  
+}
+
+/* Percurso: foto fora da grade no celular, dentro no desktop.
+   O HTML traz as duas; o media query decide qual aparece. */
+.e-foto-percurso--mobile {
+  display: none;
+}
+
+.e-foto-percurso--desk {
+  display: block;
 }
 
 .e-flor {
@@ -1208,6 +1217,16 @@
 
   /* a foto solta do desktop senta em cima da pilha; a imagem da grade fica. */
   .e-image--intro {
+    display: none;
+  }
+
+  .e-foto-percurso--mobile {
+    display: block;
+    width: 100%;
+    grid-column: auto;
+  }
+
+  .e-foto-percurso--desk {
     display: none;
   }
 

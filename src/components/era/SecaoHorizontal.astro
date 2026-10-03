@@ -117,14 +117,30 @@ const pontos = obras.map((obra, i) => {
       <!-- 3 · percurso ------------------------------------------------------>
       <article class="e-slide e-slide--path">
         <Ornamento classe="e-orno e-flor e-flor--path" />
-        
-        <div class="e-foto e-foto-percurso" data-foto>
+
+        <!-- Astro é estático: não há isMobile no servidor. As duas posições
+             existem no HTML e o CSS troca no breakpoint 768px. -->
+        <div class="e-foto e-foto-percurso e-foto-percurso--mobile" data-foto>
           <div class="e-paralelo" data-paralelo="60">
-            <Foto src="projetos/casa-praca/4.jpg" alt="Casa com pátios e vegetação, vista da sala para o quintal" sizes="(min-width: 768px) 42vw, 90vw" />
+            <Foto
+              src="projetos/casa-praca/4.jpg"
+              alt="Casa com pátios e vegetação, vista da sala para o quintal"
+              sizes="90vw"
+            />
           </div>
         </div>
+
         <div class="e-path">
           <div class="e-grade e-path-topo">
+            <div class="e-foto e-foto-percurso e-foto-percurso--desk" data-foto>
+              <div class="e-paralelo" data-paralelo="60">
+                <Foto
+                  src="projetos/casa-praca/4.jpg"
+                  alt="Casa com pátios e vegetação, vista da sala para o quintal"
+                  sizes="(min-width: 768px) 42vw, 90vw"
+                />
+              </div>
+            </div>
             <div class="e-path-titulo">
               <span class="e-t-3 e-linha" data-linha="140">
                 <Dividido texto="De São Paulo" />
