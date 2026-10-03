@@ -19,9 +19,9 @@
   --h1: calc(var(--cel) * 1.4118);
   --h3: calc(var(--cel) * 0.7059);
   --h4: calc(var(--cel) * 0.4632);
-  --h5: calc(var(--cel) * 0.3941);
+  --h5: calc(var(--cel) * 0.2941);
   --c1: max(13px, calc(var(--cel) * 0.1838));
-  --p1: max(12px, calc(var(--cel) * 0.1256));
+  --p1: max(12px, calc(var(--cel) * 0.0956));
   --l1: max(10px, calc(var(--cel) * 0.0809));
   --l2: max(9px, calc(var(--cel) * 0.0662));
   --a1: calc(var(--cel) * 1.4118);
@@ -564,7 +564,7 @@
     transform: none;
     pointer-events: none;
   }
-
+ 
   .e-contato-foto picture,
   .e-contato-foto img {
     display: block;
@@ -1139,6 +1139,14 @@
     right: 0;
     z-index: 60;
   }
+  .e-t-5 {
+    font-size: var(--h4);
+    /* line-height: 1; */
+    /* letter-spacing: -0.008em; */
+  }
+.e-p1{
+  font-size: var(--c1);
+}
 
   .e-intro {
     display: flex;
