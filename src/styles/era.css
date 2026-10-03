@@ -559,17 +559,17 @@
 @media (min-width: 768px) {
   .e-contato-foto {
     inset: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     transform: none;
     pointer-events: none;
   }
- 
+
   .e-contato-foto picture,
   .e-contato-foto img {
     display: block;
     width: 100%;
-    height: 140%;
+    height: 100%;
     object-fit: cover;
     object-position: center bottom;
   }
@@ -657,6 +657,38 @@
 
 .e-contato-dados a:hover {
   color: var(--color-terracota);
+}
+
+.e-contato-copy {
+  margin-top: var(--u-32);
+  opacity: 0.55;
+}
+
+/* Laptops ~1280×800: a tipografia da célula ainda é grande e o bloco
+   passava de uma tela. Aperta só o contato; monitores largos ficam iguais. */
+@media (min-width: 768px) and (max-width: 1365px) {
+  .e-contato {
+    padding: clamp(3.25rem, 7vh, 5.5rem) var(--offset);
+    gap: var(--u-16);
+  }
+
+  .e-contato-titulo {
+    font-size: calc(var(--h3) * 0.78);
+    line-height: 0.92;
+  }
+
+  .e-contato-principal {
+    font-size: calc(var(--h5) * 0.92);
+  }
+
+  .e-contato-dados {
+    margin-top: var(--u-16);
+    padding-top: var(--u-16);
+  }
+
+  .e-contato-copy {
+    margin-top: var(--u-16);
+  }
 }
 
 /* --------------------------- chrome fixo da página ------------------------ */
