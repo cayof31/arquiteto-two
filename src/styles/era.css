@@ -668,8 +668,10 @@
    passava de uma tela. Aperta só o contato; monitores largos ficam iguais. */
 @media (min-width: 768px) and (max-width: 1365px) {
   .e-contato {
-    padding: clamp(3.25rem, 7vh, 5.5rem) var(--offset);
+    padding: clamp(8.25rem, 11vh, 12.5rem) var(--offset);
     gap: var(--u-16);
+    height: 100dvh;
+    width: 100dvw;
   }
 
   .e-contato-titulo {
